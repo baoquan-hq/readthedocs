@@ -6,8 +6,6 @@
 欢迎使用保全网API文档
 ===================================
 
-Contents:
-
 .. toctree::
 	:maxdepth: 2
 
@@ -17,12 +15,4 @@ Contents:
 	返回结果 <response>
 	签名 <signature>
 	接口 <api>
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
