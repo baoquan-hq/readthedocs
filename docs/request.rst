@@ -10,9 +10,13 @@
 
 保全网会提供向后兼容的API，不同的API版本会以比如v1、v2.1这样的字符串标记，当前的版本为v1。
 
-正式环境：https://baoquan.com/api/v1
+正式环境：`https://baoquan.com/api/v1`
 
-沙盒环境：https://sandbox.baoquan.com/api/v1
+沙盒环境：`https://sandbox.baoquan.com/api/v1`
+
+请求路径=API环境+接口名称，比如保全接口的名称是/attestations，则正式环境的请求为
+`https://baoquan.com/api/v1/attestations`
+
 
 方法
 --------------
