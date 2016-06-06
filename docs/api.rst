@@ -29,7 +29,7 @@ attachments        数组对象，附件的校验码，可选         可选
 		}
 	}
 
-假定客户制作了一份如图所示的模板：
+其中type是用户定义的陈述名称，data是陈述的字段值，如下图所示：
 
 .. image:: images/use_template.png
 
