@@ -35,6 +35,14 @@ attachments        数组对象，附件的校验码，可选         可选
 
 模板中包含common和hash两个陈述。common中的attestation_no(保全号)、attestation_at(保全时间)、product_name(产品名称)、organization_name(组织名称)在模板渲染时由保全网提供。hash这个陈述是客户自己定义的，所以需要客户通过API上传。
 
+.. note:: 
+	在添加陈述对象是要保证陈述对象跟编辑模板时的要求一致。以下几种情况会导致保全失败：
+	
+	- 上传了模板中没有的陈述对象，比如模板中没有type为product的对象却上传了。
+	- 模板中有字段是必要的，但是完成陈述上传时并没有上传该字段，比如user.name需要上传且不能为空，
+	  但是没有上传type为user的data或者data中没有name这个字段。
+	- 上传的字段的格式不符，比如模板中要求user.money是int型，但是上传的user.money值是"$100"
+
 模板中可能包含多个客户自定义的陈述，比如factoA和factoB，此时客户可以选择分两次上传，第一次上传factoA，并设置completed为false，第二次上传factoB，并设置completed为true。
 
 .. note:: 一旦completed设置为true，则不再接受陈述上传。

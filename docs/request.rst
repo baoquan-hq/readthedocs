@@ -12,7 +12,7 @@
 
 正式环境：`https://baoquan.com/api/v1`
 
-沙盒环境：`https://sandbox.baoquan.com/api/v1`
+测试环境：`https://stg.baoquan.com/api/v1`
 
 请求路径=API环境+接口名称，比如保全接口的名称是/attestations，则正式环境的请求为
 `https://baoquan.com/api/v1/attestations`
