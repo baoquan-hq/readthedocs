@@ -5,7 +5,7 @@ PHP
 
 	{
 	  "require": {
-	    "baoquan/eagle-sdk": "1.0.3"
+	    "baoquan/eagle-sdk": "1.0.4"
 	  }
 	}
 
@@ -191,3 +191,33 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	}
 
 追加陈述的时候同样能为陈述上传附件，跟创建保全为陈述上传附件一样。
+
+获取保全数据
+------------------
+
+::
+
+	try {
+		$response = $this->client->getAttestation('DB0C8DB14E3C44C7B9FBBE30EB179241');
+		var_dump($response['data']);
+	} catch (ServerException $e) {
+		echo $e->getMessage();
+	}
+
+getAttestation有两个参数，第1个参数ano是保全号，第二个参数fields是一个数组用于设置可选的返回字段
+
+下载保全文件
+------------------
+
+::
+
+	try {
+		$response = $this->client->downloadAttestation('DB0C8DB14E3C44C7B9FBBE30EB179241');
+		$file = fopen($response['file_name'], 'w');
+		fwrite($file, $response['file']->getContents());
+		fclose($file);
+	} catch (ServerException $e) {
+		echo $e->getMessage();
+	}
+
+返回的response有两个字段，file_name表示文件名，file是一个\\Psr\\Http\\Message\\StreamInterface实例

@@ -29,7 +29,7 @@ attachments        数组对象，附件的校验码，可选         可选
 		}
 	}
 
-其中type是用户定义的陈述名称，data是陈述的字段值，如下图所示：
+其中type是客户定义的陈述名称，data是陈述的字段值，如下图所示：
 
 .. image:: images/use_template.png
 
@@ -222,3 +222,161 @@ success            是否成功，布尔值
 			"success": true,
 		}
 	}
+
+获取保全数据 - /attestation
+-------------------------------
+
+客户可以通过该接口获取上传的保全数据，比如身份标识、陈述列表等
+
+payload
+^^^^^^^^^^^^^^^
+
+=================  ================================ ================
+参数名 				描述                             是否可选
+=================  ================================ ================
+ano                String字符串，保全号               必选
+fields             数组对象，希望返回的字段            可选，默认为null
+=================  ================================ ================
+
+由于获取identities、factoids、attachments等字段需要连接数据库、对数据进行解密，耗时较长，所以提供fields进行返回字段的设置。
+
+返回的data
+^^^^^^^^^^^^^^
+
+=================  ================================================================
+字段名 				描述                            
+=================  ================================================================
+no                 保全号
+template_id        模板id 
+identities         身份标识
+factoids           陈述列表
+completed          陈述是否上传完成
+attachments        附件列表
+blockchain_hash    区块链hash，当尚未hash到区块链时为空                                          
+=================  ================================================================
+
+attachments是一个数组，其中key是factoids中陈述的角标，value是一个附件id数组
+
+（1）当fields为null时会获取所有的字段值，返回的结果例如::
+
+	{
+		"request_id": "2XiTgZ2oVrBgGqKQ1ruCKh",
+		"data": {
+			"no": "DB0C8DB14E3C44C7B9FBBE30EB179241",
+			"template_id" : "5Yhus2mVSMnQRXobRJCYgt",
+			"identities": {
+				"ID": "42012319800127691X",
+				"MO": "15857112383"
+			},
+			"factoids": [
+				{
+					"type": "product",
+					"data": {
+						"name:: "浙金网",
+						"description": "p2g理财平台""
+					}
+				},
+				{
+					"type": "user",
+					"data": {
+						"name": "张三",
+						"phone_number": "13234568732",
+						"registered_at": "1466674609",
+						"username": "tom"
+					}
+				}
+			],
+			"completed": true,
+			"attachments": {
+				"1": [
+					"2EHJQPs5j4SZpEKQXQ7r6C",
+					"2F81ZJXosNjzrPJsXKywAu"
+				]
+			},
+			"blockchain_hash": "s5j4SZpEKQXQ7r6C2F81ZJXosNjzrPJsXKywAu"
+		}
+	}
+
+（2）当fields为一个空数组时不会获取identities、factoids和attachments的值，返回的结果例如::
+	
+	{
+		"request_id": "2XiTgZ2oVrBgGqKQ1ruCKh",
+		"data": {
+			"no": "DB0C8DB14E3C44C7B9FBBE30EB179241",
+			"template_id" : "5Yhus2mVSMnQRXobRJCYgt",
+			"identities": null,
+			"factoids": null,
+			"completed": true,
+			"attachments": null,
+			"blockchain_hash": "s5j4SZpEKQXQ7r6C2F81ZJXosNjzrPJsXKywAu"
+		}
+	}
+
+因此当需要快速获取blockchain_hash时可以设置fields为一个空数组。
+
+（3）当fields为一个非空数组，比如["identities"]，返回的结果例如::
+
+	{
+		"request_id": "2XiTgZ2oVrBgGqKQ1ruCKh",
+		"data": {
+			"no": "DB0C8DB14E3C44C7B9FBBE30EB179241",
+			"template_id" : "5Yhus2mVSMnQRXobRJCYgt",
+			"identities": {
+				"ID": "42012319800127691X",
+				"MO": "15857112383"
+			},
+			"factoids": null,
+			"completed": true,
+			"attachments": null,
+			"blockchain_hash": "s5j4SZpEKQXQ7r6C2F81ZJXosNjzrPJsXKywAu"
+		}
+	}
+
+下载保全文件 - /attestation/download
+--------------------------------------------------------------
+
+客户上传到保全数据会经过一定的处理（比如模板渲染）生成一份保全文件，这份保全文件才是最终会hash到区块链上的数据，也是最终能通过公证处出公证书或者通过司法鉴定中心出司法鉴定书的数据。
+
+payload
+^^^^^^^^^^^^^^^
+
+=================  ================================ ================
+参数名 				描述                             是否可选
+=================  ================================ ================
+ano                String字符串，保全号               必选
+=================  ================================ ================
+
+返回的文件
+^^^^^^^^^^^^^^^
+
+该接口会返回保全文件以及文件名，文件就是http返回结果的body，文件名存放在http的header中，header的名称是Content-Disposition，header值形如::
+	
+	form-data; name=Content-Disposition; filename=5Yhus2mVSMnQRXobRJCYgt.zip
+
+以java为例::
+
+	// 此处省略使用apache http client构造http请求的过程
+	// closeableHttpResponse是一个CloseableHttpResponse实例
+	HttpEntity httpEntity = closeableHttpResponse.getEntity();
+	Header header = closeableHttpResponse.getFirstHeader(MIME.CONTENT_DISPOSITION);
+	Pattern pattern = Pattern.compile(".*filename=\"(.*)\".*");
+	Matcher matcher = pattern.matcher(header.getValue());
+	String fileName = "";
+	if (matcher.matches()) {
+	fileName = matcher.group(1);
+	}
+	FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+	IOUtils.copy(httpEntity.getContent(), fileOutputStream);
+	fileOutputStream.close();
+
+
+
+
+
+
+
+
+
+
+
+
