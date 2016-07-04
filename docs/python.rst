@@ -93,7 +93,7 @@ rsa私钥文件应该以 **-----BEGIN RSA PRIVATE KEY-----** 开头和 **-----EN
 			'completed': true
 		})
 		print(response['data']['no'])
-	expect ServerException as e:
+	except ServerException as e:
 		print(e.message)
 
 如果创建保全时需要给陈述上传对应的附件::
@@ -126,7 +126,7 @@ rsa私钥文件应该以 **-----BEGIN RSA PRIVATE KEY-----** 开头和 **-----EN
 	try:
 		response = client.create_attestation(payload, attachments)
 		print(response['data']['no'])
-	expect ServerException as e:
+	except ServerException as e:
 		print(e.message)
 
 追加陈述
@@ -152,7 +152,7 @@ rsa私钥文件应该以 **-----BEGIN RSA PRIVATE KEY-----** 开头和 **-----EN
 			]
 			})
 		print(response['data']['success'])
-	expect ServerException as e:
+	except ServerException as e:
 		print(e.message)	
 
 追加陈述的时候同样能为陈述上传附件，跟创建保全为陈述上传附件一样。
@@ -165,7 +165,7 @@ rsa私钥文件应该以 **-----BEGIN RSA PRIVATE KEY-----** 开头和 **-----EN
 	try:
 		response = client.get_attestation('DB0C8DB14E3C44C7B9FBBE30EB179241')
 		print(response['data'])
-	expect ServerException as e:
+	except ServerException as e:
 		print(e.message)	
 
 get_attestation有两个参数，第1个参数ano是保全号，第二个参数fields是一个数组用于设置可选的返回字段
@@ -179,7 +179,7 @@ get_attestation有两个参数，第1个参数ano是保全号，第二个参数f
 		response = client.download_attestation('DB0C8DB14E3C44C7B9FBBE30EB179241')
 		with open(response['file_name'], 'wb') as f:
 			f.write(response['file_content'])
-	expect ServerException as e:
+	except ServerException as e:
 		print(e.message)
 
 返回的response有两个字段，file_name表示文件名，file_content是以字节形式表示的文件内容
