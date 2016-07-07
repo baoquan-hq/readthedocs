@@ -58,10 +58,10 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	// sdk中默认的request id生成器
 	public class DefaultRequestIdGenerator implements RequestIdGenerator {
 
-	  @Override
-	  public String createRequestId() {
-	    return UUID.randomUUID().toString();
-	  }
+		@Override
+		public String createRequestId() {
+			return UUID.randomUUID().toString();
+		}
 	}
 
 客户端初始化完成后即可调用客户端中的方法发送请求
@@ -104,10 +104,10 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	payload.setFactoids(factoids);
 	// 调用创建保全接口，如果成功则返回保全号，如果失败则返回失败消息
 	try {
-	  CreateAttestationResponse response = client.createAttestation(payload);
-	  System.out.println(response.getData().getNo());
+		CreateAttestationResponse response = client.createAttestation(payload);
+		System.out.println(response.getData().getNo());
 	} catch (ServerException e) {
-	  System.out.println(e.getMessage());
+		System.out.println(e.getMessage());
 	}
 
 如果创建保全时需要给陈述上传对应的附件::
@@ -125,10 +125,10 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	attachments.put("1", Arrays.asList(byteArrayBody1, byteArrayBody2));
 	// 此处省略payload的创建
 	try {
-	  CreateAttestationResponse response = client.createAttestation(payload, attachments);
-	  System.out.println(response.getData().getNo());
+		CreateAttestationResponse response = client.createAttestation(payload, attachments);
+		System.out.println(response.getData().getNo());
 	} catch (ServerException e) {
-	  System.out.println(e.getMessage());
+		System.out.println(e.getMessage());
 	}
 
 追加陈述
@@ -153,10 +153,39 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	addFactoidsPayload.setFactoids(factoids);
 	// 调用追加陈述接口，如果成功则返回的success为true，如果失败则返回失败消息
 	try {
-	  AddFactoidsResponse response = client.addFactoids(addFactoidsPayload);
-	  System.out.println(response.getData().isSuccess());
+		AddFactoidsResponse response = client.addFactoids(addFactoidsPayload);
+		System.out.println(response.getData().isSuccess());
 	} catch (ServerException e) {
-	  System.out.println(e.getMessage());
+		System.out.println(e.getMessage());
 	}
 
 追加陈述的时候同样能为陈述上传附件，跟创建保全为陈述上传附件一样。
+
+获取保全数据
+------------------
+
+::
+
+	try {
+		GetAttestationResponse response = client.getAttestation("DB0C8DB14E3C44C7B9FBBE30EB179241", null);
+		System.out.println(response.getData());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}	
+
+getAttestation有两个参数，第1个参数ano是保全号，第二个参数fields是一个数组用于设置可选的返回字段
+
+下载保全文件
+------------------
+
+::
+
+	try {
+		DownloadFile downloadFile = client.downloadAttestation("7FF4E8F6A6764CD0895146581B2B28AA");
+
+		FileOutputStream fileOutputStream = new FileOutputStream(downloadFile.getFileName());
+		IOUtils.copy(downloadFile.getFile(), fileOutputStream);
+		fileOutputStream.close();
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
