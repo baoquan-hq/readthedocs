@@ -3,7 +3,7 @@ Python
 
 如果使用pip可以在requirements.txt中加入如下依赖::
 
-	eagle-sdk==1.0.3
+	eagle-sdk==1.0.4
 
 .. note:: 请在python 3环境下使用本sdk
 
