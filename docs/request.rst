@@ -6,15 +6,11 @@
 路径
 --------------
 
-保全网的API接入分为沙盒环境和正式环境，在正式环境下编辑好的模板可以在沙盒环境下使用，但沙盒环境下的数据可能会被定期清除。
-
 保全网会提供向后兼容的API，不同的API版本会以比如v1、v2.1这样的字符串标记，当前的版本为v1。
 
-正式环境：`https://baoquan.com/api/v1`
+API地址：`https://baoquan.com/api/v1`
 
-测试环境：`https://stg.baoquan.com/api/v1`
-
-请求路径=API环境+接口名称，比如保全接口的名称是/attestations，则正式环境的请求为
+请求路径=API地址+接口名称，比如保全接口的名称是/attestations，则请求路径为
 `https://baoquan.com/api/v1/attestations`
 
 

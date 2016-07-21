@@ -16,6 +16,7 @@
 	openssl req -x509 -newkey rsa:1024 -nodes -keyout key.pem -out cert.pem
 
 将cert.pem中的内容粘贴到文本框中，然后选择是沙盒还是正式。
+在正式环境下编辑好的模板可以在沙盒环境下使用，但沙盒环境下的数据会被定期清除。所以在您的开发环境和测试环境下请使用沙盒的access key，在生产环境使用正式的access key。
 
 .. note:: 请保管好自己的私钥，另外强烈推荐在正式环境下使用CA机构签发的证书作为公钥。
 

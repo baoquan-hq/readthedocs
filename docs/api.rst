@@ -16,7 +16,7 @@ template_id        String字符串，模板id               必选
 identities         Object对象，身份事项               必选
 factoids           数组对象，陈述集                   必选
 completed          Boolean值，是否完成陈述集的上传     可选，默认为true
-attachments        数组对象，附件的校验码，可选         可选
+attachments        附件信息数组对象                   可选
 =================  ================================ ================
 
 **陈述** 是一个Object对象，包含type和data两个字段，例如::
@@ -128,14 +128,27 @@ form表单形式上传多个附件::
 		],
 		"completed": true,
 		"attachments": {
-			"0": ["checkSum1", "checkSum2"],
+			"0": [
+				"checkSum1", 
+				{
+					"checksum": "checkSum2",
+					"sign": {
+						"F98F99A554E944B6996882E8A68C60B2": ["甲方（签章）", "甲方法人（签章）"],
+						"0A68783469E04CAC95ADEAE995A92E65": ["乙方（签章）"]
+					}
+				}
+			],
 			"1": ["checkSum3"]
 		}
 	}
 
-attachments中的key对应的是factoids数组的角标。
+attachments中的key对应的是factoids数组的下标，比如"0"对应的是factoid为factoids[0]。attachments中的value是一个数组，每个数组元素表示对应附件的附件信息。
 
-附件的checkSum是对文件进行SHA256产生的，以Java为例::
+附件信息有两种：校验码和电子签名信息，其中校验码是必须提供。当附件信息只有校验码时可以用字符串对象，当包含电子签名信息时需要使用object对象。
+
+.. note:: 只有pdf附件才能进行电子签名。
+
+校验码（checksum）是对文件进行SHA256产生的，以Java为例::
 
 	String file = "/path/to/file";
 	InputStream in = new FileInputStream(new File(file));
@@ -145,6 +158,16 @@ attachments中的key对应的是factoids数组的角标。
 
 	// 将bytes转换成16进制
 	String checkSum = Hex.encodeHexString(digestBytes);
+
+电子签名信息（sign）是一个object对象，key值是caId（客户调用申请ca证书接口时会返回caId），value值是签名关键字数组。比如“张三”和“李四”需要在“xxx合同.pdf”附件上进行电子签名，调用ca证书申请接口为“张三”申请得到的caId是"F98F99A554E944B6996882E8A68C60B2"，为“李四”申请得到的caId是"0A68783469E04CAC95ADEAE995A92E65"，其中“张三”需要在"甲方（签章）", "甲方法人（签章）"两个位置进行电子签名，”李四“只需要在"乙方（签章）"进行电子签名，那么sign对象可以表示为::
+
+	"sign": {
+		"F98F99A554E944B6996882E8A68C60B2": ["甲方（签章）", "甲方法人（签章）"],
+		"0A68783469E04CAC95ADEAE995A92E65": ["乙方（签章）"]
+	}
+
+.. note:: 同一个用户可以在多处进行电子签名，但关键字要保证唯一，不能跟正文内容重复。
+
 
 返回的data
 ^^^^^^^^^^^^^^
@@ -363,18 +386,87 @@ ano                String字符串，保全号               必选
 	Matcher matcher = pattern.matcher(header.getValue());
 	String fileName = "";
 	if (matcher.matches()) {
-	fileName = matcher.group(1);
+		fileName = matcher.group(1);
 	}
 	FileOutputStream fileOutputStream = new FileOutputStream(fileName);
 	IOUtils.copy(httpEntity.getContent(), fileOutputStream);
 	fileOutputStream.close();
 
+申请ca证书 - /cas
+--------------------------------------------------------------
 
+如果保全的附件需要进行电子签名则需要先为用户申请ca证书。
 
+payload
+^^^^^^^^^^^^^^^
 
+=================  =================================================== ================================
+参数名 				描述                                                    是否可选
+=================  =================================================== ================================
+type               String字符串，用户类型：PERSONAL、ENTERPRISE                必选
+name               企业用户名称                                          当用户类型为ENTERPRISE时必选
+ic_code            企业注册号码或者统一社会信用代码                         当用户类型为ENTERPRISE时必选
+org_code           企业组织机构代码                                       当用户类型为ENTERPRISE且ic_code表示注册代码时必选
+tax_code           企业税务登记号码                                       当用户类型为ENTERPRISE且ic_code表示注册代码时必选
+link_name           个人用户名称或企业联系人名称                            必选
+link_id_card         个人用户身份证号或企业联系人身份证号                    必选
+link_phone          个人用户手机号或企业联系人手机号                         必选
+link_email          个人用户邮箱或企业联系人邮箱                             必选
+=================  =================================================== ================================
 
+申请个人证书::
+	
+	{
+		"type": "PERSONAL",
+		"link_name": "张三",
+		"link_id_card": "330184198501184115",
+		"link_phone": "13378784545",
+		"link_email": "123@qq.com"
+	}
 
+企业三证合一情况，使用统一社会信用代码申请企业证书::
+	
+	{
+		"type": "ENTERPRISE",
+		"name": "xxx有限公司",
+		"ic_code": "91332406MA27XMXJ27",
+		"link_name": "张三",
+		"link_id_card": "330184198501184115",
+		"link_phone": "13378784545",
+		"link_email": "123@qq.com"
+	}
 
+企业非三证合一情况，使用工商注册号、组织机构代码、税务登记号申请企业证书::
+
+	{
+		"type": "ENTERPRISE",
+		"name": "xxx有限公司",
+		"ic_code": "419001000033792",
+		"org_code": "177470403",
+		"tax_code": "419001177470403",
+		"link_name": "张三",
+		"link_id_card": "330184198501184115",
+		"link_phone": "13378784545",
+		"link_email": "123@qq.com"
+	}
+
+返回的data
+^^^^^^^^^^^^^^
+
+=================  ================================
+字段名 				描述                            
+=================  ================================
+no                 caId，布尔值                                         
+=================  ================================
+
+例如::
+
+	{
+		"request_id": "2XiTgZ2oVrBgGqKQ1ruCKh",
+		"data": {
+			"no": "F98F99A554E944B6996882E8A68C60B2",
+		}
+	}
 
 
 

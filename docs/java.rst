@@ -6,12 +6,12 @@ Java
 	<dependency>
 	    <groupId>com.baoquan</groupId>
 	    <artifactId>eagle-sdk</artifactId>
-	    <version>1.0.5</version>
+	    <version>1.0.7</version>
 	</dependency>
 
 如果使用gradle，可以加入如下依赖::
 	
-	compile group: 'com.baoquan', name: 'eagle-sdk', version: '1.0.5'
+	compile group: 'com.baoquan', name: 'eagle-sdk', version: '1.0.7'
 
 初始化客户端
 ------------------
@@ -186,6 +186,60 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 		FileOutputStream fileOutputStream = new FileOutputStream(downloadFile.getFileName());
 		IOUtils.copy(downloadFile.getFile(), fileOutputStream);
 		fileOutputStream.close();
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
+申请ca证书
+------------------
+
+申请个人ca证书::
+	
+	try {
+		ApplyCaPayload payload = new ApplyCaPayload();
+		payload.setType(CaType.PERSONAL);
+		payload.setLinkName("张三");
+		payload.setLinkIdCard("330184198501184115");
+		payload.setLinkPhone("13378784545");
+		payload.setLinkEmail("123@qq.com");
+		ApplyCaResponse response = client.applyCa(payload, null);
+		System.out.println(response.getData().getNo());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
+三证合一情况，申请企业证书::
+
+	try {
+		ApplyCaPayload payload = new ApplyCaPayload();
+		payload.setType(CaType.ENTERPRISE);
+		payload.setName("xxx有限公司");
+		payload.setIcCode("91332406MA27XMXJ27");
+		payload.setLinkName("张三");
+		payload.setLinkIdCard("330184198501184115");
+		payload.setLinkPhone("13378784545");
+		payload.setLinkEmail("123@qq.com");
+		ApplyCaResponse response = client.applyCa(payload, null);
+		System.out.println(response.getData().getNo());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
+非三证合一情况，申请企业证书::
+
+	try {
+		ApplyCaPayload payload = new ApplyCaPayload();
+		payload.setType(CaType.ENTERPRISE);
+		payload.setName("xxx有限公司");
+		payload.setIcCode("419001000033792");
+		payload.setOrgCode("177470403");
+		payload.setTaxCode("419001177470403");
+		payload.setLinkName("张三");
+		payload.setLinkIdCard("330184198501184115");
+		payload.setLinkPhone("13378784545");
+		payload.setLinkEmail("123@qq.com");
+		ApplyCaResponse response = client.applyCa(payload, null);
+		System.out.println(response.getData().getNo());
 	} catch (ServerException e) {
 		System.out.println(e.getMessage());
 	}

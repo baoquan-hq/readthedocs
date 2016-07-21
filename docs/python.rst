@@ -3,7 +3,7 @@ Python
 
 如果使用pip可以在requirements.txt中加入如下依赖::
 
-	eagle-sdk==1.0.4
+	eagle-sdk==1.0.7
 
 .. note:: 请在python 3环境下使用本sdk
 
@@ -184,3 +184,53 @@ get_attestation有两个参数，第1个参数ano是保全号，第二个参数f
 
 返回的response有两个字段，file_name表示文件名，file_content是以字节形式表示的文件内容
 
+申请ca证书
+------------------
+
+申请个人ca证书::
+	
+	try:
+		response = client.apply_ca({
+			'type': 'PERSONAL',
+			'link_name': '张三',
+			'link_id_card': '330184198501184115',
+			'link_phone': '13378784545',
+			'link_email': '123@qq.com',
+		})
+		print(response['data']['no'])
+	except ServerException as e:
+		print(e.message)
+
+三证合一情况，申请企业证书::
+
+	try:
+		response = client.apply_ca({
+			'type': 'ENTERPRISE',
+			'name': 'xxx有限公司',
+			'ic_code': '91332406MA27XMXJ27',
+			'link_name': '张三',
+			'link_id_card': '330184198501184115',
+			'link_phone': '13378784545',
+			'link_email': '123@qq.com',
+		})
+		print(response['data']['no'])
+	except ServerException as e:
+		print(e.message)
+
+非三证合一情况，申请企业证书::
+
+	try:
+		response = client.apply_ca({
+			'type': 'ENTERPRISE',
+			'name': 'xxx有限公司',
+			'ic_code': '419001000033792',
+			'org_code': '177470403',
+			'tax_code': '419001177470403',
+			'link_name': '张三',
+			'link_id_card': '330184198501184115',
+			'link_phone': '13378784545',
+			'link_email': '123@qq.com',
+		})
+		print(response['data']['no'])
+	except ServerException as e:
+		print(e.message)
