@@ -3,7 +3,7 @@ Python
 
 如果使用pip可以在requirements.txt中加入如下依赖::
 
-	eagle-sdk==1.0.7
+	eagle-sdk==1.0.8
 
 .. note:: 请在python 3环境下使用本sdk
 
@@ -63,6 +63,8 @@ rsa私钥文件应该以 **-----BEGIN RSA PRIVATE KEY-----** 开头和 **-----EN
 	// 调用创建保全接口，如果成功则返回保全号，如果失败则返回失败消息
 	try:
 		response = client.create_attestation({
+			// 设置保全唯一码
+			'unique_id': 'd310a8f6-6af2-4dc9-baa0-1231cf910dbb',
 			// 设置模板id
 			'template_id': '5Yhus2mVSMnQRXobRJCYgt',
 			// 设置保全所有者的身份标识
@@ -73,6 +75,7 @@ rsa私钥文件应该以 **-----BEGIN RSA PRIVATE KEY-----** 开头和 **-----EN
 			// 陈述对象列表
 			'factoids': [
 			    {
+			    	'unique_id': '72aa5bfc-0a62-4e09-9df0-fbf8a4fb7e8f',
 			        'type': 'product',
 			        'data': {
 			            'name': '浙金网',
@@ -80,6 +83,7 @@ rsa私钥文件应该以 **-----BEGIN RSA PRIVATE KEY-----** 开头和 **-----EN
 			        }
 			    },
 			    {
+			    	'unique_id': '4da45cbc-c234-4296-b566-35d03a092f5a',
 			        'type': 'user',
 			        'data': {
 			            'name': '张三',
@@ -141,6 +145,7 @@ rsa私钥文件应该以 **-----BEGIN RSA PRIVATE KEY-----** 开头和 **-----EN
 			// 陈述对象列表
 			'factoids': [
 			    {
+			    	'unique_id': '4da45cbc-c234-4296-b566-35d03a092f5a',
 			        'type': 'user',
 			        'data': {
 			            'name': '张三',

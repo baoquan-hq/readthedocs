@@ -9,19 +9,23 @@
 payload
 ^^^^^^^^^^^^^^^
 
-=================  ================================ ================
-参数名 				描述                             是否可选
-=================  ================================ ================
-template_id        String字符串，模板id               必选
-identities         Object对象，身份事项               必选
-factoids           数组对象，陈述集                   必选
-completed          Boolean值，是否完成陈述集的上传     可选，默认为true
-attachments        附件信息数组对象                   可选
-=================  ================================ ================
+=================  ======================================= ================
+参数名 				描述                                    是否可选
+=================  ======================================= ================
+unique_id          String字符串，不超过255位，保全唯一码          必选
+template_id        String字符串，模板id                       必选
+identities         Object对象，身份事项                        必选
+factoids           数组对象，陈述集                           必选
+completed          Boolean值，是否完成陈述集的上传            可选，默认为true
+attachments        附件信息数组对象                           可选
+=================  ======================================= ================
 
-**陈述** 是一个Object对象，包含type和data两个字段，例如::
+unique_id是保全唯一码，这个唯一码的作用是避免在网络超时或者其它异常的情况下接入方重复上传相同内容的保全数据。如果同样unique_id的保全内容多次上传，保全网只进行1次保全，并返回相同的保全号。
+
+**陈述** 是一个Object对象，包含unique_id,type和data三个字段，例如::
 
 	{
+		"unique_id": "9de7be94-a697-4398-945a-678d3f916b9f",
 		"type": "hash",
 		"data": {
 			"userName": "张三",
@@ -29,7 +33,9 @@ attachments        附件信息数组对象                   可选
 		}
 	}
 
-其中type是客户定义的陈述名称，data是陈述的字段值，如下图所示：
+陈述的unique_id的作用跟保全的unique_id类似，如果某次保全过程中同样unique_id的陈述内容多次上传到保全网，保全网只处理1次。
+
+type是客户定义的陈述名称，data是陈述的字段值，如下图所示：
 
 .. image:: images/use_template.png
 
@@ -50,6 +56,7 @@ attachments        附件信息数组对象                   可选
 假定payload如下所示::
 
 	{
+		"unique_id": "acafa00d-5579-4fe5-93c1-de89ec82006e",
 		"template_id": "2hSWTZ4oqVEJKAmK2RiyT4",
 		"identities": {
 			"MO": "15857112383",
@@ -57,6 +64,7 @@ attachments        附件信息数组对象                   可选
 		},
 		"factoids": [
 			{
+				"unique_id": "9de7be94-a697-4398-945a-678d3f916b9f",
 				"type": "hash",
 				"data": {
 					"userName": "李三",
@@ -90,10 +98,12 @@ form表单形式上传单个附件::
 	</form>
 
 	payload = {
+		"unique_id": "...",
 		"template_id": "...",
 		"identities": {...},
 		"factoids": [
 			{
+				"unique_id": "...",
 				"type": "...",
 				"data": {...}
 			}
@@ -114,14 +124,17 @@ form表单形式上传多个附件::
 	</form>
 
 	payload = {
+		"unique_id": "...",
 		"template_id": "...",
 		"identities": {...},
 		"factoids": [
 			{
+				"unique_id": "...",
 				"type": "...",
 				"data": {...}
 			},
 			{
+				"unique_id": "...",
 				"type": "...",
 				"data": {...}
 			}
@@ -212,6 +225,7 @@ attachments        数组对象，附件的校验码，可选         可选
 		"ano": "2hSWTZ4oqVEJKAmK2RiyT4",
 		"factoids": [
 			{
+				"unique_id": "9de7be94-a697-4398-945a-678d3f916b9f",
 				"type": "hash",
 				"data": {
 					"userName": "李三",
@@ -286,6 +300,7 @@ attachments是一个数组，其中key是factoids中陈述的角标，value是�
 		"request_id": "2XiTgZ2oVrBgGqKQ1ruCKh",
 		"data": {
 			"no": "DB0C8DB14E3C44C7B9FBBE30EB179241",
+			"unique_id": "acafa00d-5579-4fe5-93c1-de89ec82006e",
 			"template_id" : "5Yhus2mVSMnQRXobRJCYgt",
 			"identities": {
 				"ID": "42012319800127691X",
@@ -293,6 +308,7 @@ attachments是一个数组，其中key是factoids中陈述的角标，value是�
 			},
 			"factoids": [
 				{
+					"unique_id": "28fcdf56-bff3-4ed9-9f87-c8d35ad49e0c",
 					"type": "product",
 					"data": {
 						"name:: "浙金网",
@@ -300,6 +316,7 @@ attachments是一个数组，其中key是factoids中陈述的角标，value是�
 					}
 				},
 				{
+					"unique_id": "e68eb8bc-3d7a-4e22-be47-d7999fb40c9a",
 					"type": "user",
 					"data": {
 						"name": "张三",
@@ -326,6 +343,7 @@ attachments是一个数组，其中key是factoids中陈述的角标，value是�
 		"request_id": "2XiTgZ2oVrBgGqKQ1ruCKh",
 		"data": {
 			"no": "DB0C8DB14E3C44C7B9FBBE30EB179241",
+			"unique_id": "acafa00d-5579-4fe5-93c1-de89ec82006e",
 			"template_id" : "5Yhus2mVSMnQRXobRJCYgt",
 			"identities": null,
 			"factoids": null,
@@ -343,6 +361,7 @@ attachments是一个数组，其中key是factoids中陈述的角标，value是�
 		"request_id": "2XiTgZ2oVrBgGqKQ1ruCKh",
 		"data": {
 			"no": "DB0C8DB14E3C44C7B9FBBE30EB179241",
+			"unique_id": "acafa00d-5579-4fe5-93c1-de89ec82006e",
 			"template_id" : "5Yhus2mVSMnQRXobRJCYgt",
 			"identities": {
 				"ID": "42012319800127691X",

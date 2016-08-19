@@ -5,7 +5,7 @@ PHP
 
 	{
 	  "require": {
-	    "baoquan/eagle-sdk": "1.0.7"
+	    "baoquan/eagle-sdk": "1.0.8"
 	  }
 	}
 
@@ -92,6 +92,8 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	// 调用创建保全接口，如果成功则返回保全号，如果失败则返回失败消息
 	try {
 		$response = $client->createAttestation([
+			// 设置保全唯一码
+			'unique_id'=>'5bf54bc4-ec69-4a5d-b6e4-a3f670f795f3',
 			// 设置模板id
 			'template_id'=>'5Yhus2mVSMnQRXobRJCYgt', 
 			// 设置保全所有者的身份标识
@@ -103,6 +105,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 			'factoids'=>[
 			    // product陈述
 			    [
+			    	'unique_id'=>'9826dc2a-f5af-4433-ab8d-f515630677c2',
 			        'type'=>'product',
 			        'data'=>[
 			            'name'=>'浙金网',
@@ -111,6 +114,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 			    ],
 			    // user陈述
 			    [
+			    	'unique_id'=>'c83d838e-3844-4689-addf-ca0f01171e7c',
 			        'type'=>'user',
 			        'data'=>[
 			            'name'=>'张三',
@@ -173,6 +177,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 			// 陈述对象列表
 			'factoids'=>[
 			    [
+			    	'unique_id'=>'c83d838e-3844-4689-addf-ca0f01171e7c',
 			        'type'=>'user',
 			        'data'=>[
 			            'name'=>'张三',

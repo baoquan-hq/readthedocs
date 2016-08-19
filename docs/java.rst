@@ -6,12 +6,12 @@ Java
 	<dependency>
 	    <groupId>com.baoquan</groupId>
 	    <artifactId>eagle-sdk</artifactId>
-	    <version>1.0.7</version>
+	    <version>1.0.8</version>
 	</dependency>
 
 如果使用gradle，可以加入如下依赖::
 	
-	compile group: 'com.baoquan', name: 'eagle-sdk', version: '1.0.7'
+	compile group: 'com.baoquan', name: 'eagle-sdk', version: '1.0.8'
 
 初始化客户端
 ------------------
@@ -72,6 +72,8 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 ::
 
 	CreateAttestationPayload payload = new CreateAttestationPayload();
+	// 设置保全唯一码
+	payload.setUniqueId("e68eb8bc-3d7a-4e22-be47-d7999fb40c9a");
 	// 设置模板id
 	payload.setTemplateId("5Yhus2mVSMnQRXobRJCYgt"); 
 	// 设置陈述是否上传完成，如果设置成true，则后续不能继续追加陈述
@@ -88,6 +90,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	Product product = new Product();
 	product.setName("xxx科技有限公司");
 	product.setDescription("p2g理财平台");
+	factoid.setUnique_id("e13912e2-ccce-47df-997a-9f44eb2c7b6c");
 	factoid.setType("product");
 	factoid.setData(product);
 	factoids.add(factoid);
@@ -98,6 +101,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	user.setRegistered_at("1466674609");
 	user.setUsername("tom");
 	user.setPhone_number("13452345987");
+	factoid.setUnique_id("5bf54bc4-ec69-4a5d-b6e4-a3f670f795f3");
 	factoid.setType("user");
 	factoid.setData(user);
 	factoids.add(factoid);
@@ -147,6 +151,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	user.setRegistered_at("1466674609");
 	user.setUsername("tom");
 	user.setPhone_number("13452345987");
+	factoid.setUnique_id("5bf54bc4-ec69-4a5d-b6e4-a3f670f795f3");
 	factoid.setType("user");
 	factoid.setData(user);
 	factoids.add(factoid);
