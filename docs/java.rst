@@ -166,6 +166,38 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 
 追加陈述的时候同样能为陈述上传附件，跟创建保全为陈述上传附件一样。
 
+创建保全(sha256)
+------------------
+
+::
+
+	CreateAttestationPayload payload = new CreateAttestationPayload();
+	//模板必须为系统提供的文件HASH模板的子模板。
+	payload.setTemplateId("filehash");
+	payload.setUniqueId(randomUniqueId());
+	Map<IdentityType, String> identities = new HashMap<IdentityType, String>();
+	identities.put(IdentityType.MO, "15857110000");
+	payload.setIdentities(identities);
+	List<Factoid> factoids = new ArrayList<Factoid>();
+	Factoid factoid = new Factoid();
+	factoid.setUnique_id(randomUniqueId());
+	factoid.setType("file");
+	Map<String,String> map = new HashMap<String, String>();
+	factoid.setData(map);
+	map.put("owner_name","李三");
+	map.put("owner_id","330124199501017791");
+	factoids.add(factoid);
+	payload.setFactoids(factoids);
+	// 调用创建保全接口，如果成功则返回保全号，如果失败则返回失败消息
+	try {
+		String sha256 = "654c71176b207401445fdd471f5e023f65af50d7361bf828e5b1c19c89b977b0";
+		CreateAttestationResponse response = client.createAttestationWithSha256(payload,sha256);
+		System.out.println(response.getData().getNo());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
+
 获取保全数据
 ------------------
 
