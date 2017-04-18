@@ -198,6 +198,19 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	}
 
 
+用户认证信息同步
+------------------
+
+::
+
+    try {
+        UserKycResponse response = client.userKyc("15822222224", "用户一", "42012319800127691X");
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+
+
+
 获取保全数据
 ------------------
 
@@ -280,3 +293,16 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 	} catch (ServerException e) {
 		System.out.println(e.getMessage());
 	}
+
+
+保全访问链接
+------------------
+
+::
+
+    try {
+        String accessUrl = client.attestationAccessUrl("B44FBD41439649758C6E0DC517A53F1D");
+        System.out.println(accessUrl);
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
