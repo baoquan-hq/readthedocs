@@ -306,3 +306,109 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
     } catch (ServerException e) {
         System.out.println(e.getMessage());
     }
+
+
+上传签章图片
+------------------
+
+::
+
+    try {
+         ContractPayload payload = new ContractPayload();
+         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("seal.png");
+         ByteArrayBody byteArrayBody = new ByteArrayBody(IOUtils.toByteArray(inputStream), ContentType.DEFAULT_BINARY, "seal.png");
+         Map<String, List<ByteArrayBody>> byteStreamBodyMap = new HashMap<String, List<ByteArrayBody>>();
+         byteStreamBodyMap.put("0", Collections.singletonList(byteArrayBody));
+         UploadSignatureResponse u=client.uploadSignature(payload, byteStreamBodyMap);
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+
+设置默认签章图片
+------------------
+
+::
+
+    try {
+         SignaturePayload payload = new SignaturePayload();
+         payload.setSignature_id("cey4FBLpqbsUNaLp3SENdp");
+         client.setSignatureDefaultId(payload);
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+
+签章图片列表
+------------------
+
+::
+
+    try {
+          client.listSignature();
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+
+上传合同
+------------------
+
+::
+
+    try {
+          ContractPayload payload = new ContractPayload();
+          InputStream inputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
+          ByteArrayBody byteArrayBody = new ByteArrayBody(IOUtils.toByteArray(inputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
+          Map<String, List<ByteArrayBody>> byteStreamBodyMap = new HashMap<String, List<ByteArrayBody>>();
+          byteStreamBodyMap.put("0", Collections.singletonList(byteArrayBody));
+          UploadContractResponse u = client.uploadContract(payload, byteStreamBodyMap);
+          System.out.println(u.getContractId());
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+
+设置合同详情
+------------------
+
+::
+
+    try {
+            ContractPayload payload = new ContractPayload();
+        Calendar calendar = Calendar.getInstance();
+        Date date = new Date(System.currentTimeMillis());
+        calendar.setTime(date);
+        calendar.add(Calendar.YEAR, +1);
+        date = calendar.getTime();
+        System.out.println(date);
+        payload.setEnd_at(date);
+        payload.setRemark("zheshixxxxxxxxxxxxxxx合同");
+        payload.setTitle("ssss合同");
+        payload.setContract_id("dJobmNW2FvuR9m3fHskbsV");
+        List<String> usePhones = new ArrayList();
+        usePhones.add("18272161340");
+        usePhones.add("18551824340");
+        payload.setUserPhones(usePhones);
+        client.setContractDetail(payload);
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+
+发送验证码
+------------------
+
+::
+
+    try {
+          client.sendVerifyCode("hspH56P7nZU4XSJRWWGvpy", "15811111111");
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+
+签署合同或设置合同状态
+------------------
+
+::
+
+    try {
+         client.signContract("hspH56P7nZU4XSJRWWGvpy", "15811111111", "4752", "DONE", "4", "400", "550");
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }

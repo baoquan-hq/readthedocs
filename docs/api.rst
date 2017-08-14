@@ -705,6 +705,30 @@ result             String字符串，设置的结果
         "result":"success"
     }
 
+列出签章图片 - /contract/signature/list
+----------------------
+
+客户在保全网电子签章时查看自己所有的签章图片。
+
+返回的data
+^^^^^^^^^^^^^^
+
+调用接口成功后会返回是否成功
+
+=================  ================================
+字段类型 				描述
+=================  ================================
+Map                   key-value，key为签章图片id，value为签章图片地址
+=================  ================================
+
+例如::
+
+   {
+	    "ejDVGiGeCQ5Ndn6dzsnWx9": "https://eagle-p1.oss-cn-szfinance.aliyuncs.com/production/trust/uploads/userSignature/1b338bba-64c1-47d8-bb34-dcb2dbfd7e48.png",
+	    "cey4FBLpqbsUNaLp3SENdp": "https://eagle-p1.oss-cn-szfinance.aliyuncs.com/production/trust/uploads/userSignature/5f80cd17-016e-4266-9c35-13266767edb7.png",
+	    "gHuVuR2EfvJXAF6D1AqEix": "https://eagle-p1.oss-cn-szfinance.aliyuncs.com/production/trust/uploads/userSignature/fb4a28b2-0d1e-4a61-8913-6a259d06ca5a.png"
+    }
+
 上传合同 - /contract/uploadPdf
 ----------------------
 
