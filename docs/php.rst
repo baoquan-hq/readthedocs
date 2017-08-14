@@ -5,7 +5,7 @@ PHP
 
 	{
 	  "require": {
-	    "baoquan/eagle-sdk": "1.0.8"
+	    "baoquan/eagle-sdk": "1.0.11"
 	  }
 	}
 
@@ -16,11 +16,11 @@ PHP
 
 	$client = new BaoquanClient();
 	// 设置api地址，比如保全网的测试环境地址
-	$client->setHost('https://baoquan.com'); 
+	$client->setHost('https://baoquan.com');
 	// 设置access key
-	$client->setAccessKey('fsBswNzfECKZH9aWyh47fc'); 
+	$client->setAccessKey('fsBswNzfECKZH9aWyh47fc');
 	// 设置rsa私钥文件的绝对路径
-	$client->setPemPath('path/to/rsa_private.pem'); 
+	$client->setPemPath('path/to/rsa_private.pem');
 
 rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PRIVATE KEY-----** 结尾，比如::
 
@@ -63,7 +63,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 ^^^^^^^^^^^^^^^
 
 还有些其它可选的初始化设置，比如设置api版本，设置request id生成器，默认情况下你无需进行这些设置::
-	
+
 	// 设置api版本
 	$client->setVersion('v1');
 	// 设置request id生成器，生成器需要实现RequestIdGenerator接口中的createRequestId方法
@@ -95,7 +95,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 			// 设置保全唯一码
 			'unique_id'=>'5bf54bc4-ec69-4a5d-b6e4-a3f670f795f3',
 			// 设置模板id
-			'template_id'=>'5Yhus2mVSMnQRXobRJCYgt', 
+			'template_id'=>'5Yhus2mVSMnQRXobRJCYgt',
 			// 设置保全所有者的身份标识
 			'identities'=>[
 			    'ID'=>'42012319800127691X',
@@ -173,7 +173,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	try {
 		$response = $client->addFactoids([
 			// 设置保全号
-			'ano'=>'7F189BBB5FA1451EA8601D0693E36FE7', 
+			'ano'=>'7F189BBB5FA1451EA8601D0693E36FE7',
 			// 陈述对象列表
 			'factoids'=>[
 			    [
@@ -231,7 +231,7 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 ------------------
 
 申请个人ca证书::
-	
+
 	try {
 		$response = $client->applyCa([
 			'type'=>'PERSONAL',
@@ -279,4 +279,122 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 		echo $response['data']['no'];
 	} catch (ServerException $e) {
 		echo $e->getMessage();
+	}
+
+签章图片管理
+------------------
+
+上传签章图片::
+
+	try {
+	     $attachments = [
+	            0=>[
+	                [
+	                    'resource'=>fopen(__DIR__.'/resources/seal.png', 'r'),
+	                    'resource_name'=>'seal.png'
+	                ]
+	            ]
+	    ];
+
+	    $response = $client->uploadContractSignaturePng($attachments);
+	    print_r($response['signatureId']);
+	} catch (ServerException $e) {
+	    echo $e->getMessage();
+	}
+
+列出签章图片::
+
+	try {
+	    $response = $client->listContractSignature();
+	    print_r($response);
+	} catch (ServerException $e) {
+	    echo $e->getMessage();
+	}
+
+设置默认签章图片::
+
+	try {
+	    $response = $client->setDefaultContractSignatureId([
+	        'signature_id'=>"dtodydoVEtvCVY6ee2RNco"
+	        ]);
+	    print_r($response);
+	} catch (ServerException $e) {
+	    echo $e->getMessage();
+	}
+
+删除签章图片::
+
+	try {
+	    $response = $client->deleteContractSignature([
+	        'signature_id'=>"nSysHgKX1Z1sHd9eQGRAe8"
+	        ]);
+
+	    print_r($response);
+	} catch (ServerException $e) {
+	    echo $e->getMessage();
+	}
+
+合同管理
+------------------
+
+上传pdf合同文件::
+
+	try {
+	     $attachments = [
+	            0=>[
+	                [
+	                    'resource'=>fopen(__DIR__.'/resources/contract.pdf', 'r'),
+	                    'resource_name'=>'contract.pdf'
+	                ]
+	            ]
+	    ];
+
+	    $response = $client->uploadContractPdf($attachments);
+	    print_r($response);
+	} catch (ServerException $e) {
+	    echo $e->getMessage();
+	}
+
+设置合同和内容，在上传合同之后请求::
+
+	try {
+	    $response = $client->setContractDetail([
+	        "contract_id"=>"qCWgbg26B63SJEio8Wr2rf",
+	        "title"=>"这是合同标题",
+	        "end_at"=>"2017-12-31",
+	        "userPhones"=>["13812345678","13712345678"],
+	        "remark"=>"这是备注信息",
+	        ]);
+	    print_r($response);
+	} catch (ServerException $e) {
+	    echo $e->getMessage();
+	}
+
+请求短信验证码，在修改合同状态之前请求::
+
+	try {
+	    $response = $client->requireContractVerifyCode([
+	        "contract_id"=>"qCWgbg26B63SJEio8Wr2rf",
+	        "phone"=>"18167127094",
+	        ]);
+	    print_r($response);
+	} catch (ServerException $e) {
+	    echo $e->getMessage();
+	}
+
+修改合同状态 （签署|取消|拒绝）::
+
+	try {
+	    $response = $client->signContract([
+	        "contract_id"=>"qCWgbg26B63SJEio8Wr2rf",
+	        "phone"=>"13812345678",
+	        "verify_code"=>123456,
+	        "ecs_status"=>"DONE",
+	        "page"=>"1",
+	        "posX"=>"2",
+	        "posY"=>"3",
+	        ]);
+	    print_r($response);
+	} catch (ServerException $e) {
+	    echo $e->getMessage();
 	}
