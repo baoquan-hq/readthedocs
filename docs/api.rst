@@ -829,7 +829,7 @@ payload
 contract_id        String字符串，合同id                      必选
 phone              String字符串，当前签署人手机号                   必选
 =================  ======================================= ================
-phone 必须按签署顺序来，创建人第一（即access_key所属组织的创建者），其次是设置合同时列表的顺序
+phone 必须按签署顺序来，创建人第一（即access_key所属组织的创建者），其后是设置合同时列表的顺序
 假定payload如下所示::
 
     {
@@ -857,7 +857,7 @@ result              String字符串，设置的结果
 签署合同和设置签署合同状态 - /contract/sign
 ----------------------
 
-客户在保全网电子签章时设置合同的相关信息。
+客户在保全网签署合同和设置签署合同状态。
 
 payload
 ^^^^^^^^^^^^^^^
@@ -872,12 +872,13 @@ ecs_status             枚举值，合同状态                    必选
 page                String字符串，签署位置所在页码                    必选
 posX                String字符串，签署横坐标位置               必选
 posY                String字符串，签署纵坐标位置               必选
-template_id        String字符串，模板id                       必选
-identities         Object对象，身份事项                        必选
-factoids           数组对象，陈述集                           必选
+template_id        String字符串，模板id                       可选
+identities         Object对象，身份事项                        可选（template_id有值时必填）
+factoids           数组对象，陈述集                           可选（template_id有值时必填）
 completed          Boolean值，是否完成陈述集的上传            可选，默认为true
 =================  ======================================= ================
-ecs_status位枚举值，签署时为"DONE",取消时为"CANCEL"取消只能发起人取消,拒绝时为"REJECT"
+ecs_status位枚举值，签署时为"DONE",取消时为"CANCEL"取消只能发起人取消,拒绝时为"REJECT"，
+template_id为生成的保全证书模板id（可到官网设置自己的模板），可不填，填了则identities，factoids必填
 假定payload如下所示::
 
     {
