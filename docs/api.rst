@@ -872,6 +872,10 @@ ecs_status             枚举值，合同状态                    必选
 page                String字符串，签署位置所在页码                    必选
 posX                String字符串，签署横坐标位置               必选
 posY                String字符串，签署纵坐标位置               必选
+template_id        String字符串，模板id                       必选
+identities         Object对象，身份事项                        必选
+factoids           数组对象，陈述集                           必选
+completed          Boolean值，是否完成陈述集的上传            可选，默认为true
 =================  ======================================= ================
 ecs_status位枚举值，签署时为"DONE",取消时为"CANCEL"取消只能发起人取消,拒绝时为"REJECT"
 假定payload如下所示::
@@ -881,11 +885,33 @@ ecs_status位枚举值，签署时为"DONE",取消时为"CANCEL"取消只能发�
          "phone": "15811111111",
          "verify_code": "1525",
          "ecs_status": "DONE",
-          "contract_id": "4imixswKjEUU2rzintD3Vx",
-          "page": "4",
-          "posX": "400",
-          "posY": "500",
-    }
+         "contract_id": "4imixswKjEUU2rzintD3Vx",
+         "page": "4",
+         "posX": "400",
+         "posY": "500",
+	     "template_id": "2hSWTZ4oqVEJKAmK2RiyT4",
+	     "identities": {
+			 "MO": "15857112383",
+		   	 "ID": "42012319800127691X"
+		  },
+		  "factoids": [
+			  {
+			  	  "unique_id": "9de7be94-a697-4398-945a-678d3f916b9f",
+				  "type": "hash",
+				  "data": {
+					  "userName": "李三",
+					  "idCard": "330124199501017791",
+					  "buyAmount": 0.3,
+					  "incomeStartTime": "2015-12-02",
+					  "incomeEndTime": "2016-01-01",
+					  "createTime": "2015-12-01 14:33:44",
+					  "payTime": "2015-12-01 14:33:59",
+					  "payAmount": 600
+				  }
+		  	  }
+		  ],
+		  "completed": true
+     }
 
 返回的data
 ^^^^^^^^^^^^^^

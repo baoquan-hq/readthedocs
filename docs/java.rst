@@ -408,7 +408,18 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 ::
 
     try {
-         client.signContract("hspH56P7nZU4XSJRWWGvpy", "15811111111", "4752", "DONE", "4", "400", "550");
+       Map<String, String> identitiesMap = new HashMap<String, String>();
+        List<PayloadFactoid> list = new ArrayList<PayloadFactoid>();
+        PayloadFactoid payloadFactoid = new PayloadFactoid();
+        LinkedHashMap<String , Object> linkedHashMap = new LinkedHashMap<String, Object>();
+        linkedHashMap.put("userTruename","张三");
+        linkedHashMap.put("address", "hangzhou");
+        payloadFactoid.setType("product");
+        payloadFactoid.setData(linkedHashMap);
+        list.add(payloadFactoid);
+        identitiesMap.put("MO","15611111111");
+        identitiesMap.put("ID", "430426198401361452");
+        client.signContract("vcVuhR2e1odTShZnJug7cg", "15866666666", "2560", "DONE", "4", "400", "550","_priv_template_2", identitiesMap, list,false);
     } catch (ServerException e) {
         System.out.println(e.getMessage());
     }
