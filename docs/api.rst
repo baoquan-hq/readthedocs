@@ -881,38 +881,38 @@ ecs_status位枚举值，签署时为"DONE",取消时为"CANCEL"取消只能发�
 template_id为生成的保全证书模板id（可到官网设置自己的模板），可不填，填了则identities，factoids必填
 假定payload如下所示::
 
-    {
-        "title": "这是xx合同的标题",
-         "phone": "15811111111",
-         "verify_code": "1525",
-         "ecs_status": "DONE",
-         "contract_id": "4imixswKjEUU2rzintD3Vx",
-         "page": "4",
-         "posX": "400",
-         "posY": "500",
-	     "template_id": "2hSWTZ4oqVEJKAmK2RiyT4",
-	     "identities": {
-			 "MO": "15857112383",
-		   	 "ID": "42012319800127691X"
-		  },
-		  "factoids": [
-			  {
-			  	  "unique_id": "9de7be94-a697-4398-945a-678d3f916b9f",
-				  "type": "hash",
-				  "data": {
-					  "userName": "李三",
-					  "idCard": "330124199501017791",
-					  "buyAmount": 0.3,
-					  "incomeStartTime": "2015-12-02",
-					  "incomeEndTime": "2016-01-01",
-					  "createTime": "2015-12-01 14:33:44",
-					  "payTime": "2015-12-01 14:33:59",
-					  "payAmount": 600
-				  }
-		  	  }
-		  ],
-		  "completed": true
-     }
+   {
+    "title": "这是xx合同的标题",
+    "phone": "15811111111",
+    "verify_code": "1525",
+    "ecs_status": "DONE",
+    "contract_id": "4imixswKjEUU2rzintD3Vx",
+    "page": "4",
+    "posX": "400",
+    "posY": "500",
+    "template_id": "2hSWTZ4oqVEJKAmK2RiyT4",
+    "identities": {
+        "MO": "15857112383",
+        "ID": "42012319800127691X"
+    },
+    "factoids": [
+        {
+            "unique_id": "9de7be94-a697-4398-945a-678d3f916b9f",
+            "type": "hash",
+            "data": {
+                "userName": "李三",
+                "idCard": "330124199501017791",
+                "buyAmount": 0.3,
+                "incomeStartTime": "2015-12-02",
+                "incomeEndTime": "2016-01-01",
+                "createTime": "2015-12-01 14:33:44",
+                "payTime": "2015-12-01 14:33:59",
+                "payAmount": 600
+            }
+        }
+    ],
+    "completed": true
+}
 
 返回的data
 ^^^^^^^^^^^^^^
@@ -927,6 +927,6 @@ result              String字符串，合同签署结果
 
 例如::
 
-    {
-        "result": "success"
-    }
+	{
+    		"result": "success"
+	}
