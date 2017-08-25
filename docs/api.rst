@@ -207,7 +207,7 @@ no                 String字符串，保全号
 
 客户可以使用追加陈述接口上传陈述集
 
-当上传保全时completed参数为false（未设置默认为true）可追加陈述。
+当上传保全时completed参数为false（未设置默认为true）可追加陈述，陈述接口不产生新的保全号。
 
 payload
 ^^^^^^^^^^^^^^^
