@@ -423,3 +423,27 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
     } catch (ServerException e) {
         System.out.println(e.getMessage());
     }
+	
+合同列表
+------------------
+
+::
+
+    try {
+       ContractListPayload payload = new ContractListPayload();
+        payload.setStatus("DONE");
+        client.queryList(payload);
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+	
+合同签署详情信息
+------------------
+
+::
+
+    try {
+       client.getDetail("uqg9hB2JQg61g22ma2bFY2");
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
