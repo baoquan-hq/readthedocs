@@ -5,7 +5,7 @@ PHP
 
 	{
 	  "require": {
-	    "baoquan/eagle-sdk": "1.0.11"
+	    "baoquan/eagle-sdk": "1.0.12"
 	  }
 	}
 
@@ -394,6 +394,31 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 	        "posX"=>"2",
 	        "posY"=>"3",
 	        ]);
+	    print_r($response);
+	} catch (ServerException $e) {
+	    echo $e->getMessage();
+	}
+	
+查询合同列表 ::
+
+	try {
+	    $response = $client->contractList([
+		'status'=>'DONE',
+		'keyWord'=>'李四',
+		'start'=>'2017-8-30',
+		'end'=>'2017-9-1 12:00:00'
+		]);
+	    print_r($response);
+	} catch (ServerException $e) {
+	    echo $e->getMessage();
+	}
+	
+查询合同详情::
+
+	try {
+	    $response = $client->contractDetail([
+		'contract_id'=>'uqg9hB2JQg61g22ma2bFY2'
+		]);
 	    print_r($response);
 	} catch (ServerException $e) {
 	    echo $e->getMessage();
