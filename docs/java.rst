@@ -209,6 +209,30 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
         System.out.println(e.getMessage());
     }
 
+企业认证信息同步
+------------------
+
+::
+
+	try {
+		 KycEnterprisePayload payload = new KycEnterprisePayload();
+        payload.setAccountName("潇潇公司");
+        payload.setBank("中国银行");
+        payload.setBankAccount("111111111111");
+        payload.setName("这是我的新公司");
+        payload.setOrgcode("123456");
+        payload.setPhone("17696526111");
+        InputStream businessInputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
+        ByteArrayBody businessFile = new ByteArrayBody(IOUtils.toByteArray(businessInputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
+        // Map<String, List<ByteArrayBody>> byteStreamBodyMap = new HashMap<String, List<ByteArrayBody>>();
+        //byteStreamBodyMap.put("0", Collections.singletonList(byteArrayBody));
+        // CreateAttestationResponse response = client.createAttestation(payload, byteStreamBodyMap);
+        InputStream letterInputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
+        ByteArrayBody letterFile = new ByteArrayBody(IOUtils.toByteArray(letterInputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
+        kycEnterpriseResponse response = client.kycEnterprise(payload, businessFile, letterFile);
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
 
 
 获取保全数据
@@ -236,67 +260,6 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 		FileOutputStream fileOutputStream = new FileOutputStream(downloadFile.getFileName());
 		IOUtils.copy(downloadFile.getFile(), fileOutputStream);
 		fileOutputStream.close();
-	} catch (ServerException e) {
-		System.out.println(e.getMessage());
-	}
-
-企业认证信息同步
-------------------
-
-企业认证信息同步::
-	
-	try {
-		 KycEnterprisePayload payload = new KycEnterprisePayload();
-        payload.setAccountName("潇潇公司");
-        payload.setBank("中国银行");
-        payload.setBankAccount("111111111111");
-        payload.setName("这是我的新公司");
-        payload.setOrgcode("123456");
-        payload.setPhone("17696526111");
-        InputStream businessInputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
-        ByteArrayBody businessFile = new ByteArrayBody(IOUtils.toByteArray(businessInputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
-        // Map<String, List<ByteArrayBody>> byteStreamBodyMap = new HashMap<String, List<ByteArrayBody>>();
-        //byteStreamBodyMap.put("0", Collections.singletonList(byteArrayBody));
-        // CreateAttestationResponse response = client.createAttestation(payload, byteStreamBodyMap);
-        InputStream letterInputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
-        ByteArrayBody letterFile = new ByteArrayBody(IOUtils.toByteArray(letterInputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
-        kycEnterpriseResponse response = client.kycEnterprise(payload, businessFile, letterFile);
-	} catch (ServerException e) {
-		System.out.println(e.getMessage());
-	}
-
-三证合一情况，申请企业证书::
-
-	try {
-		ApplyCaPayload payload = new ApplyCaPayload();
-		payload.setType(CaType.ENTERPRISE);
-		payload.setName("xxx有限公司");
-		payload.setIcCode("91332406MA27XMXJ27");
-		payload.setLinkName("张三");
-		payload.setLinkIdCard("330184198501184115");
-		payload.setLinkPhone("13378784545");
-		payload.setLinkEmail("123@qq.com");
-		ApplyCaResponse response = client.applyCa(payload, null);
-		System.out.println(response.getData().getNo());
-	} catch (ServerException e) {
-		System.out.println(e.getMessage());
-	}
-
-非三证合一情况，申请企业证书::
-
-	try {
-		ApplyCaPayload payload = new ApplyCaPayload();
-		payload.setType(CaType.ENTERPRISE);
-		payload.setName("xxx有限公司");
-		payload.setIcCode("419001000033792");
-		payload.setOrgCode("177470403");
-		payload.setTaxCode("419001177470403");
-		payload.setLinkName("张三");
-		payload.setLinkIdCard("330184198501184115");
-		payload.setLinkPhone("13378784545");
-		payload.setLinkEmail("123@qq.com");
-		ApplyCaResponse response = client.applyCa(payload, null);
-		System.out.println(response.getData().getNo());
 	} catch (ServerException e) {
 		System.out.println(e.getMessage());
 	}
