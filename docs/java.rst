@@ -6,12 +6,12 @@ Java
 	<dependency>
 	    <groupId>com.baoquan</groupId>
 	    <artifactId>eagle-sdk</artifactId>
-	    <version>1.0.16</version>
+	    <version>1.0.17</version>
 	</dependency>
 
 如果使用gradle，可以加入如下依赖::
 	
-	compile group: 'com.baoquan', name: 'eagle-sdk', version: '1.0.16'
+	compile group: 'com.baoquan', name: 'eagle-sdk', version: '1.0.17'
 
 初始化客户端
 ------------------
@@ -240,20 +240,27 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 		System.out.println(e.getMessage());
 	}
 
-申请ca证书
+企业认证信息同步
 ------------------
 
-申请个人ca证书::
+企业认证信息同步::
 	
 	try {
-		ApplyCaPayload payload = new ApplyCaPayload();
-		payload.setType(CaType.PERSONAL);
-		payload.setLinkName("张三");
-		payload.setLinkIdCard("330184198501184115");
-		payload.setLinkPhone("13378784545");
-		payload.setLinkEmail("123@qq.com");
-		ApplyCaResponse response = client.applyCa(payload, null);
-		System.out.println(response.getData().getNo());
+		 KycEnterprisePayload payload = new KycEnterprisePayload();
+        payload.setAccountName("潇潇公司");
+        payload.setBank("中国银行");
+        payload.setBankAccount("111111111111");
+        payload.setName("这是我的新公司");
+        payload.setOrgcode("123456");
+        payload.setPhone("17696526111");
+        InputStream businessInputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
+        ByteArrayBody businessFile = new ByteArrayBody(IOUtils.toByteArray(businessInputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
+        // Map<String, List<ByteArrayBody>> byteStreamBodyMap = new HashMap<String, List<ByteArrayBody>>();
+        //byteStreamBodyMap.put("0", Collections.singletonList(byteArrayBody));
+        // CreateAttestationResponse response = client.createAttestation(payload, byteStreamBodyMap);
+        InputStream letterInputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
+        ByteArrayBody letterFile = new ByteArrayBody(IOUtils.toByteArray(letterInputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
+        kycEnterpriseResponse response = client.kycEnterprise(payload, businessFile, letterFile);
 	} catch (ServerException e) {
 		System.out.println(e.getMessage());
 	}
@@ -419,7 +426,7 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
         list.add(payloadFactoid);
         identitiesMap.put("MO","15611111111");
         identitiesMap.put("ID", "430426198401361452");
-        client.signContract("vcVuhR2e1odTShZnJug7cg", "15866666666", "2560", "DONE", "4", "400", "550","_priv_template_2", identitiesMap, list,false);
+        client.signContract("vcVuhR2e1odTShZnJug7cg", "15866666666", "2560", "DONE", "4", "400", "550","_priv_template_2", identitiesMap, list,false,null,null);
     } catch (ServerException e) {
         System.out.println(e.getMessage());
     }
