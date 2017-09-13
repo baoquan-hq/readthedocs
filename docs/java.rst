@@ -223,12 +223,12 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
         payload.setOrgcode("123456");
         payload.setPhone("17696526111");
         InputStream businessInputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
-        ByteArrayBody businessFile = new ByteArrayBody(IOUtils.toByteArray(businessInputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
+        ByteArrayBody businessFile = new ByteArrayBody(IOUtils.toByteArray(businessInputStream), ContentType.DEFAULT_BINARY, "contract.jpg");
         // Map<String, List<ByteArrayBody>> byteStreamBodyMap = new HashMap<String, List<ByteArrayBody>>();
         //byteStreamBodyMap.put("0", Collections.singletonList(byteArrayBody));
         // CreateAttestationResponse response = client.createAttestation(payload, byteStreamBodyMap);
         InputStream letterInputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
-        ByteArrayBody letterFile = new ByteArrayBody(IOUtils.toByteArray(letterInputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
+        ByteArrayBody letterFile = new ByteArrayBody(IOUtils.toByteArray(letterInputStream), ContentType.DEFAULT_BINARY, "contract.jpg");
         kycEnterpriseResponse response = client.kycEnterprise(payload, businessFile, letterFile);
 	} catch (ServerException e) {
 		System.out.println(e.getMessage());
