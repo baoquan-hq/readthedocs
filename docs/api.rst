@@ -559,7 +559,7 @@ kycEnterprise        企业认证信息的键值对
 		    "orgcode": "123456",
 		    "name": "xxxxx公司",
 		    "letterFile": "https://baoquan-pub.oss-cn-hangzhou.aliyuncs.com/staging/trust/uploads/kycEnterprise/027c1563-2e8d-465f-a0d3-06e66b61a6c8.png",
-            "businessFile": "https://baoquan-pub.oss-cn-hangzhou.aliyuncs.com/staging/trust/uploads/kycEnterprise/716d1ff2-e631-4c61-8ced-4553a8d58de4.png",
+                "businessFile": "https://baoquan-pub.oss-cn-hangzhou.aliyuncs.com/staging/trust/uploads/kycEnterprise/716d1ff2-e631-4c61-8ced-4553a8d58de4.png",
 		    "status": "PASS"
 	    }
     }
