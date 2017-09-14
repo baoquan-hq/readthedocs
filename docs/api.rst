@@ -1124,16 +1124,16 @@ payload
 ^^^^^^^^^^^^^^^
 
 =================  ======================================= ================
-参数名 				描述                                    是否可选
+参数名 				描述                         是否可选
 =================  ======================================= ================
-group_id        String字符串，合同组id                      必选
-phone              String字符串，当前签署人手机号                   必选
-verify_code        String字符串，收到的验证码                  必选
-ecs_status             枚举值，合同状态                    必选
-page                String字符串，签署位置所在页码                    必选
-posX                String字符串，签署横坐标位置               必选
-posY                String字符串，签署纵坐标位置               必选
-template_id        String字符串，模板id                       可选
+group_id           String字符串，合同组id                         必选
+phone              String字符串，当前签署人手机号                  必选
+verify_code        String字符串，收到的验证码                     必选
+ecs_status             枚举值，合同状态                          必选
+page                String字符串，签署位置所在页码               必选
+posX                String字符串，签署横坐标位置                 必选
+posY                String字符串，签署纵坐标位置                  必选
+template_id        String字符串，模板id                         可选
 identities         Object对象，身份事项                        可选（template_id有值时必填）
 factoids           数组对象，陈述集                           可选（template_id有值时必填）
 completed          Boolean值，是否完成陈述集的上传            可选，默认为true
