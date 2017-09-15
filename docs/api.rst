@@ -1197,7 +1197,7 @@ result              String字符串，合同签署结果
     		"result": "success"
 	}    
 
-合同组签署发送验证码 - /contract/verifyCode
+合同组签署发送验证码 - /contract/verifyCodeForGroup
 ----------------------
 
 客户在保全网电子签章时发送验证码。
