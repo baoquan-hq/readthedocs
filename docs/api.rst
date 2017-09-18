@@ -984,14 +984,14 @@ payload
 ^^^^^^^^^^^^^^^
 
 =================  ======================================= ================
-参数名 				描述                                    是否可选
+参数名 				描述                         是否可选
 =================  ======================================= ================
 contract_id            String字符串，合同id                      必选
 =================  ======================================= ================
 假定payload如下所示::
 
    {
-    "contract_id": "4imixswKjEUU2rzintD3Vx"
+    "contract_id": "jVef7CWtiFTvGRZ9ZG6ndD"
 }
 
 返回的data
@@ -1011,26 +1011,33 @@ Map                   key-value，value为合同详情
     	   "detail": {			   
 		"signList": [
 			       {
-				"phoneNumber": "15833333333",
-				"isSigned": "Yes",
-				"signUser": "张三",
+				"id": "isSpr9bHLZj6CuiZobYgvU",
+				"eContractId": "jVef7CWtiFTvGRZ9ZG6ndD",
+				"eContractSignId": "cf6cbNnZ4ZAP8stXD4NG5G",
+				"userId": "isxaH5d3EAo3KkBWs1bCLC",
+				"name": "张三",
+				"phoneNumber": "18311111111",
+				"signOrder": "1",
 				"status": "DONE",
-				"finishedAt": "1501153123000",
+				"createdAt": "1505700143000"
 			       },{
-				"phoneNumber": "15811111111",
-				"isSigned": "Yes",
-				"signUser": "李四",
-				"status": "DONE",
-				"finishedAt": "1501153134045",
+				"id": "we1FxES4e4YMNPMp7HZJEq",
+				"eContractId": "jVef7CWtiFTvGRZ9ZG6ndD",
+				"eContractSignId": "kKFr7E9hT88honVeXkLHLW",
+				"userId": "48JGfksQ3LZATZs3TmPTeV",
+				"name": "李四",
+				"phoneNumber": "18322222222",
+				"signOrder": "2",
+				"status": "WAIT",
+				"createdAt": "1505700140000"
 				}
 			    ],
-				"fileName": "张三，李四",
-				"size": "695531",
-				"endDate": "1500548241000",
-				"fileKey": "https://baoquan-pub.oss-cn-hangzhou.aliyuncs.com/staging/trust/uploads/contract/a06131a9-609b-4fe1-96bb-9c656fdf929a.pdf",
-				"id": "4imixswKjEUU2rzintD3Vx",
-				"startDate": "1499066843000",
-				"status": "DONE"						
+				"endDate": "1537279284000",
+				"id": "jVef7CWtiFTvGRZ9ZG6ndD",
+				"startDate": "1505700065000",
+      				"isCreator": false,
+   				"status": "WAIT_OTHERS",
+    				"token": "aa5JMXFiv-6_upl81M8Xzp2cgENyf_HkVKVie40Ouw4plZAVRPpfxSjwF4PMLSTTn0qbsE9wuWsoDwkQ-4D1RAJ1-					     POJAs6hU8yCEufmj45j_SyO4zYcFW0kHPIMjWbJ"
 		   }
 	}
 
