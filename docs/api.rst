@@ -1060,22 +1060,28 @@ contract_id            String字符串，合同id                      必选
     "contract_id": "jVef7CWtiFTvGRZ9ZG6ndD"
 }
 
-返回的data
-^^^^^^^^^^^^^^
+返回的文件
+^^^^^^^^^^^^^^^
 
-调用接口成功后会返回合同文件路径
+该接口会返回合同文件以及文件名，文件就是http返回结果的body，文件名存放在http的header中，header的名称是Content-Disposition，header值形如::
+	
+	form-data; name=Content-Disposition; filename=jVef7CWtiFTvGRZ9ZG6ndD.pdf
 
-=================  ================================
-字段名 				描述
-=================  ================================
-result                  String字符串，合同文件路径
-=================  ================================
+以java为例::
 
-例如::	
-
-	{
-    	   "result": "C:\Users\ADMINI~1\AppData\Local\Temp\.eagle\decrypt\20170919\decrypt_5515958328902127004.pdf"
+	// 此处省略使用apache http client构造http请求的过程
+	// closeableHttpResponse是一个CloseableHttpResponse实例
+	HttpEntity httpEntity = closeableHttpResponse.getEntity();
+	Header header = closeableHttpResponse.getFirstHeader(MIME.CONTENT_DISPOSITION);
+	Pattern pattern = Pattern.compile(".*filename=\"(.*)\".*");
+	Matcher matcher = pattern.matcher(header.getValue());
+	String fileName = "";
+	if (matcher.matches()) {
+		fileName = matcher.group(1);
 	}
+	FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+	IOUtils.copy(httpEntity.getContent(), fileOutputStream);
+	fileOutputStream.close();
 
 创建合同组 - /contract/group
 ----------------------
