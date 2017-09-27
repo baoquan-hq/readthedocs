@@ -952,27 +952,27 @@ Map                   key-value，value为数组集合
 例如::
 
 	{
-    		"list": [
-			    {
-				   "attestationId": "FDD989DBC9894C94B3AD26CE7D85FEA2",
-				   "signUser": "张三，李四",
-				   "id": "5j1ugSoK5EzkTmkTypH58u",
-				   "title": "xxx合同",
-				   "endAt": "1534505604000",
-				   "userId": "isxaH5d3EAo3KkBWs1bCLC",
-				   "createAt": "1502969589000",
-				   "status": "DONE"
-				},{
-				   "attestationId": "EB56D19A331E48D78B37250B05563C60",
-				   "signUser": "张三，王五",
-				   "id": "vFBB2sXbZDeWVSd91sVUTk",
-				   "title": "xx合同",
-				   "endAt": "1534386299000",
-				   "userId": "isxaH5d3EAo3KkBWs1bCLC",
-				   "createAt": "1502850267000",
-				   "status": "DONE"
-				}			
-			]
+    	  "list": [
+		       {
+			"attestationId": "FDD989DBC9894C94B3AD26CE7D85FEA2",
+			"signUser": "张三，李四",
+		        "id": "5j1ugSoK5EzkTmkTypH58u",
+			"title": "xxx合同",
+			"endAt": "1534505604000",
+			"userId": "isxaH5d3EAo3KkBWs1bCLC",
+			"createAt": "1502969589000",
+			"status": "DONE"
+		     },{
+			"attestationId": "EB56D19A331E48D78B37250B05563C60",
+			"signUser": "张三，王五",
+			"id": "vFBB2sXbZDeWVSd91sVUTk",
+			"title": "xx合同",
+			"endAt": "1534386299000",
+			"userId": "isxaH5d3EAo3KkBWs1bCLC",
+			"createAt": "1502850267000",
+			"status": "DONE"
+		        }			
+		]
 	}
 	
 获取合同签署详情信息 - /contract/detail
@@ -984,14 +984,14 @@ payload
 ^^^^^^^^^^^^^^^
 
 =================  ======================================= ================
-参数名 				描述                                    是否可选
+参数名 				描述                         是否可选
 =================  ======================================= ================
 contract_id            String字符串，合同id                      必选
 =================  ======================================= ================
 假定payload如下所示::
 
    {
-    "contract_id": "4imixswKjEUU2rzintD3Vx"
+    "contract_id": "jVef7CWtiFTvGRZ9ZG6ndD"
 }
 
 返回的data
@@ -1008,28 +1008,277 @@ Map                   key-value，value为合同详情
 例如::
 
 	{
-    		"detail": {			   
-				   "signList": [
-						{
-							"phoneNumber": "15833333333",
-							"isSigned": "Yes",
-							"signUser": "张三",
-							"status": "DONE",
-							"finishedAt": "1501153123000",
-					    },{
-							"phoneNumber": "15811111111",
-							"isSigned": "Yes",
-							"signUser": "李四",
-							"status": "DONE",
-							"finishedAt": "1501153134045",
-					    }
-				   ],
-				   "fileName": "张三，李四",
-				   "size": "695531",
-				   "endDate": "1500548241000",
-				   "fileKey": "https://baoquan-pub.oss-cn-hangzhou.aliyuncs.com/staging/trust/uploads/contract/a06131a9-609b-4fe1-96bb-9c656fdf929a.pdf",
-				   "id": "4imixswKjEUU2rzintD3Vx",
-				   "startDate": "1499066843000",
-				   "status": "DONE"						
-			}
+    	   "detail": {			   
+		"signList": [
+			       {
+				"id": "isSpr9bHLZj6CuiZobYgvU",
+				"eContractId": "jVef7CWtiFTvGRZ9ZG6ndD",
+				"eContractSignId": "cf6cbNnZ4ZAP8stXD4NG5G",
+				"userId": "isxaH5d3EAo3KkBWs1bCLC",
+				"name": "张三",
+				"phoneNumber": "18311111111",
+				"signOrder": "1",
+				"status": "DONE",
+				"createdAt": "1505700143000"
+			       },{
+				"id": "we1FxES4e4YMNPMp7HZJEq",
+				"eContractId": "jVef7CWtiFTvGRZ9ZG6ndD",
+				"eContractSignId": "kKFr7E9hT88honVeXkLHLW",
+				"userId": "48JGfksQ3LZATZs3TmPTeV",
+				"name": "李四",
+				"phoneNumber": "18322222222",
+				"signOrder": "2",
+				"status": "WAIT",
+				"createdAt": "1505700140000"
+				}
+			    ],
+				"endDate": "1537279284000",
+				"id": "jVef7CWtiFTvGRZ9ZG6ndD",
+				"startDate": "1505700065000",
+      				"isCreator": false,
+   				"status": "WAIT_OTHERS",
+    				"token": "aa5JMXFiv-6_upl81M8Xzp2cgENyf_HkVKVie40Ouw4plZAVRPpfxSjwF4PMLSTTn0qbsE9wuWsoDwkQ-4D1RAJ1-					     POJAs6hU8yCEufmj45j_SyO4zYcFW0kHPIMjWbJ"
+		   }
 	}
+	
+签署合同下载 - /contract/download
+----------------------
+
+客户在保全网下载签署合同文件。
+
+payload
+^^^^^^^^^^^^^^^
+
+=================  ======================================= ================
+参数名 				描述                         是否可选
+=================  ======================================= ================
+contract_id            String字符串，合同id                      必选
+=================  ======================================= ================
+假定payload如下所示::
+
+   {
+    "contract_id": "jVef7CWtiFTvGRZ9ZG6ndD"
+}
+
+返回的文件
+^^^^^^^^^^^^^^^
+
+该接口会返回合同文件以及文件名，文件就是http返回结果的body，文件名存放在http的header中，header的名称是Content-Disposition，header值形如::
+	
+	form-data; name=Content-Disposition; filename=jVef7CWtiFTvGRZ9ZG6ndD.pdf
+
+以java为例::
+
+	// 此处省略使用apache http client构造http请求的过程
+	// closeableHttpResponse是一个CloseableHttpResponse实例
+	HttpEntity httpEntity = closeableHttpResponse.getEntity();
+	Header header = closeableHttpResponse.getFirstHeader(MIME.CONTENT_DISPOSITION);
+	Pattern pattern = Pattern.compile(".*filename=\"(.*)\".*");
+	Matcher matcher = pattern.matcher(header.getValue());
+	String fileName = "";
+	if (matcher.matches()) {
+		fileName = matcher.group(1);
+	}
+	FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+	IOUtils.copy(httpEntity.getContent(), fileOutputStream);
+	fileOutputStream.close();
+
+创建合同组 - /contract/group
+----------------------
+客户在保全网电子签章时创建合同组并上传用来签章合同pdf。
+
+附件
+^^^^^^^^^^^^^^^
+同保全附件上传，暂只支持单个合同，附件必须是pdf格式
+
+form表单形式上传单个附件::
+
+	<form method='post' enctype='multipart/form-data'>
+	  ...
+	  <input type=file name="attachments[0][]">
+	</form>
+
+返回的data
+^^^^^^^^^^^^^^
+
+调用接口成功后会返回创建的合同组id
+
+=================  ================================
+字段名 				描述
+=================  ================================
+groupId            String字符串，合同组id
+=================  ================================
+合同组可添加多份合同，但是签署时pdf内容都是一致的，如需添加合同内容不一致的pdf请重新创建合同组
+例如::
+
+    {
+	   "groupId":"kRcDGVqwxrKmjG1oBjH5BN"
+    }
+    
+合同组添加合同并设置合同相关信息 - /contract/setGroupDetail
+----------------------
+
+客户在保全网电子签章时设置合同组的相关信息。
+
+payload
+^^^^^^^^^^^^^^^
+
+=================  ======================================= ================
+参数名 				描述                                    是否可选
+=================  ======================================= ================
+group_id           String字符串，合同组id                    必选
+title              String字符串，合同标题                    必选
+end_at             Date类型，合同可以签署的截止时间           必选
+remark             String字符串，合同备注                    必选
+userPhones         数组对象，签署合同人员电话                必选
+=================  ======================================= ================
+userPhones 为合同签署人列表，签署人必须在保全网已注册且实名
+假定payload如下所示::
+
+    {
+        "title": "这是xx合同的标题",
+         "end_at": "TueAug1418: 08: 29CST2018",
+         "remark": "这是xx合同的备注信息",
+          "userPhones": [
+             "15811111111",
+             "15822222222"
+
+          ],
+          "group_id": "kRcDGVqwxrKmjG1oBjH5BN"
+    }
+
+返回的data
+^^^^^^^^^^^^^^
+
+调用接口成功后会返回设置的合同id
+
+=================  ================================
+字段名 				描述
+=================  ================================
+contract_id              String字符串，返回的合同id
+=================  ================================
+
+例如::
+
+    {
+        "contractId": "8P77Xa35ioMX5W1Z4zHyVJ"
+    }
+    
+签署合同和设置签署组状态 - /contract/signGroup
+----------------------
+
+客户在保全网签署合同和设置签署合同组状态。
+
+payload
+^^^^^^^^^^^^^^^
+
+=================  ======================================= ================
+参数名 				描述                         是否可选
+=================  ======================================= ================
+group_id           String字符串，合同组id                         必选
+phone              String字符串，当前签署人手机号                  必选
+verify_code        String字符串，收到的验证码                     必选
+ecs_status             枚举值，合同状态                          必选
+page                String字符串，签署位置所在页码               必选
+posX                String字符串，签署横坐标位置                 必选
+posY                String字符串，签署纵坐标位置                  必选
+template_id        String字符串，模板id                         可选
+identities         Object对象，身份事项                        可选（template_id有值时必填）
+factoids           数组对象，陈述集                           可选（template_id有值时必填）
+completed          Boolean值，是否完成陈述集的上传            可选，默认为true
+signature_id       String字符串，签章id                       可选，可不填
+type               String字符串，签署类型                     可选，可不填（可选"personal"，"enterprise"）
+=================  ======================================= ================
+ecs_status位枚举值，签署时为"DONE"
+"DONE"状态的合同组可继续调用添加合同接口，向组内添加合同，且无需再发验证码，签署的合同默认还是创建该合同组时所上传的合同
+template_id为生成的保全证书模板id（可到官网设置自己的模板），可不填，填了则identities，factoids必填
+signature_id为签章图片得id，设置则使用此签章图片签章，不设置则根据企业实名认证信息或个人实名认证信息生成签章图片
+type为签署类型，现有"personal"个人签章，不会生成ca证书只会在合同上生成个人姓名水印；"enterprise"企业签章，如未上传签章图片id怎根据企业实名认证信息生成签章；如不填，不填则会寻找此账户默认签章图片，如无默认签章图片则根据此账户是否企业认证，根据企业认证名称生成签章图片，如没有企业认证则根据此用户实名认证信息生成个人图片签署
+假定payload如下所示::
+
+   {
+    "title": "这是xx合同的标题",
+    "phone": "15811111111",
+    "verify_code": "1525",
+    "ecs_status": "DONE",
+    "group_id": "8P77Xa35ioMX5W1Z4zHyVJ",
+    "page": "4",
+    "posX": "400",
+    "posY": "500",
+    "template_id": "2hSWTZ4oqVEJKAmK2RiyT4",
+    "identities": {
+        "MO": "15857112383",
+        "ID": "42012319800127691X"
+    },
+    "factoids": [
+        {
+            "unique_id": "9de7be94-a697-4398-945a-678d3f916b9f",
+            "type": "hash",
+            "data": {
+                "userName": "李三",
+                "idCard": "330124199501017791",
+                "buyAmount": 0.3,
+                "incomeStartTime": "2015-12-02",
+                "incomeEndTime": "2016-01-01",
+                "createTime": "2015-12-01 14:33:44",
+                "payTime": "2015-12-01 14:33:59",
+                "payAmount": 600
+            }
+        }
+    ],
+    "completed": true,
+    "signature_id":"",
+    "type":""
+}
+
+返回的data
+^^^^^^^^^^^^^^
+
+=================  ================================
+字段名 				描述
+=================  ================================
+result              String字符串，合同签署结果
+=================  ================================
+
+例如::
+
+	{
+    		"result": "success"
+	}    
+
+合同组签署发送验证码 - /contract/verifyCodeForGroup
+----------------------
+
+客户在保全网电子签章时发送验证码。
+
+payload
+^^^^^^^^^^^^^^^
+
+=================  ======================================= ================
+参数名 				描述                         是否可选
+=================  ======================================= ================
+group_id           String字符串，合同组id                        必选
+phone              String字符串，组创建人手机号                    必选
+=================  ======================================= ================
+phone 为合同组的创建人
+假定payload如下所示::
+
+    {
+        "phone": "15861111111",
+        "group_id": "kRcDGVqwxrKmjG1oBjH5BN"
+    }
+
+返回的data
+^^^^^^^^^^^^^^
+
+=================  ================================
+字段名 				描述
+=================  ================================
+result              String字符串，设置的结果
+=================  ================================
+
+例如::
+
+    {
+        "result": "success"
+    }

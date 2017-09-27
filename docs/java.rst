@@ -417,3 +417,93 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
     } catch (ServerException e) {
         System.out.println(e.getMessage());
     }
+    
+签署合同下载
+------------------
+
+::
+
+	try {
+		DownloadFile downloadFile = client.downloadContract("jVef7CWtiFTvGRZ9ZG6ndD");
+
+		FileOutputStream fileOutputStream = new FileOutputStream(downloadFile.getFileName());
+		IOUtils.copy(downloadFile.getFile(), fileOutputStream);
+		fileOutputStream.close();
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
+创建合同组
+------------------
+
+::
+
+    try {
+         ContractPayload payload = new ContractPayload();
+         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
+         ByteArrayBody byteArrayBody = new ByteArrayBody(IOUtils.toByteArray(inputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
+         Map<String, List<ByteArrayBody>> byteStreamBodyMap = new HashMap<String, List<ByteArrayBody>>();
+         byteStreamBodyMap.put("0", Collections.singletonList(byteArrayBody));
+         CreateGroupResponse u = client.createGroup(payload, byteStreamBodyMap);
+         System.out.println(u.getGroupId());
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+
+设置合同组详情
+------------------
+
+::
+
+    try {
+         ContractPayload payload = new ContractPayload();
+        Calendar calendar = Calendar.getInstance();
+        Date date = new Date(System.currentTimeMillis());
+        calendar.setTime(date);
+        calendar.add(Calendar.YEAR, +1);
+        date = calendar.getTime();
+        System.out.println(date);
+        payload.setEnd_at(date);
+	payload.setRemark("zheshixxxxxxxxxxxxxxx合同");
+        payload.setTitle("ssss合同");
+        payload.setGroup_id("kRcDGVqwxrKmjG1oBjH5BN");
+        List<String> usePhones = new ArrayList();
+        usePhones.add("18322222222");
+        payload.setUserPhones(usePhones);
+        client.setContractGroupDetail(payload);
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+    
+签署合同并设置合同组状态
+------------------
+
+::
+
+    try {
+       Map<String, String> identitiesMap = new HashMap<String, String>();
+        List<PayloadFactoid> list = new ArrayList<PayloadFactoid>();
+        PayloadFactoid payloadFactoid = new PayloadFactoid();
+        LinkedHashMap<String , Object> linkedHashMap = new LinkedHashMap<String, Object>();
+        linkedHashMap.put("userTruename","张三");
+        linkedHashMap.put("address", "hangzhou");
+        payloadFactoid.setType("product");
+        payloadFactoid.setData(linkedHashMap);
+        list.add(payloadFactoid);
+        identitiesMap.put("MO","15611111111");
+        identitiesMap.put("ID", "430426198401361452");
+        client.setContractGroupStatus("kRcDGVqwxrKmjG1oBjH5BN", "18311111111", "3986", "DONE", "4", "400", "550","_priv_template_2", identitiesMap, list,false,null,null);
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }   
+    
+合同组签署发送验证码
+------------------
+
+::
+
+    try {
+          client.sendVerifyCodeForGroup("kRcDGVqwxrKmjG1oBjH5BN", "18311111111");
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
