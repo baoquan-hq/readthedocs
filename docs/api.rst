@@ -518,8 +518,8 @@ userId             同步认证信息后，返回保全网自动注册的USERID
 企业认证信息同步 - /organizations/kyc
 -------------------------------
 
-客户可以通过该接口同步企业认证信息到保全网，并自动生成一个用户与此企业关联，同步用户信息后，此用户可以
-登录保全网查询合同签署信息
+客户可以通过该接口同步企业认证信息到保全网，并自动生成一个用户与此企业关联
+
 payload
 ^^^^^^^^^^^^^^^
 
@@ -533,9 +533,8 @@ bank                企业开户银行                        必选
 bankAccount         企业银行账号                        必选
 orgcode             统一社会信用代码                    必选
 businessFile        营业执照                            必选
-letterFile          认证授权公函                        必选
 =================  ================================ ================
-一个用户只能关联一个企业，此用户可以是已在保全网注册用户
+一个用户只能关联一个企业
 
 
 返回的data
@@ -558,8 +557,7 @@ kycEnterprise        企业认证信息的键值对
 		    "accountName": "潇潇公司",
 		    "orgcode": "123456",
 		    "name": "xxxxx公司",
-		    "letterFile": "https://baoquan-pub.oss-cn-hangzhou.aliyuncs.com/staging/trust/uploads/kycEnterprise/027c1563-2e8d-465f-a0d3-06e66b61a6c8.png",
-                "businessFile": "https://baoquan-pub.oss-cn-hangzhou.aliyuncs.com/staging/trust/uploads/kycEnterprise/716d1ff2-e631-4c61-8ced-4553a8d58de4.png",
+            "businessFile": "https://baoquan-pub.oss-cn-hangzhou.aliyuncs.com/staging/trust/uploads/kycEnterprise/716d1ff2-e631-4c61-8ced-4553a8d58de4.png",
 		    "status": "PASS"
 	    }
     }

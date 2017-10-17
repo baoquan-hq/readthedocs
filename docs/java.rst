@@ -219,17 +219,12 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
         payload.setAccountName("潇潇公司");
         payload.setBank("中国银行");
         payload.setBankAccount("111111111111");
-        payload.setName("这是我的新公司");
+        payload.setName("这是我的公司");
         payload.setOrgcode("123456");
         payload.setPhone("17696526111");
-        InputStream businessInputStream = getClass().getClassLoader().getResourceAsStream("contract.jpg");
-        ByteArrayBody businessFile = new ByteArrayBody(IOUtils.toByteArray(businessInputStream), ContentType.DEFAULT_BINARY, "contract.jpg");
-        // Map<String, List<ByteArrayBody>> byteStreamBodyMap = new HashMap<String, List<ByteArrayBody>>();
-        //byteStreamBodyMap.put("0", Collections.singletonList(byteArrayBody));
-        // CreateAttestationResponse response = client.createAttestation(payload, byteStreamBodyMap);
-        InputStream letterInputStream = getClass().getClassLoader().getResourceAsStream("contract.jpg");
-        ByteArrayBody letterFile = new ByteArrayBody(IOUtils.toByteArray(letterInputStream), ContentType.DEFAULT_BINARY, "contract.jpg");
-        kycEnterpriseResponse response = client.kycEnterprise(payload, businessFile, letterFile);
+        InputStream businessInputStream = getClass().getClassLoader().getResourceAsStream("licence.jpg");
+        ByteArrayBody businessFile = new ByteArrayBody(IOUtils.toByteArray(businessInputStream), ContentType.DEFAULT_BINARY, "licence.jpg");
+        kycEnterpriseResponse response = client.kycEnterprise(payload, businessFile);
 	} catch (ServerException e) {
 		System.out.println(e.getMessage());
 	}
