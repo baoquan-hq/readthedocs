@@ -13,7 +13,7 @@
 
 .. image:: images/create_key.png 
 
-可以参考如下shell命令制作自己的证书::
+可以参考如下shell命令制作自己的证书，openssl版本要求>=1.0.2::
 
 	openssl req -x509 -newkey rsa:1024 -nodes -keyout key.pem -out cert.pem
 
