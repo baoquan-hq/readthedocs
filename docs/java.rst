@@ -6,7 +6,7 @@ Java
 	<dependency>
 	    <groupId>com.baoquan</groupId>
 	    <artifactId>eagle-sdk</artifactId>
-	    <version>1.0.20</version>
+	    <version>1.0.21</version>
 	</dependency>
 
 如果使用gradle，可以加入如下依赖::
@@ -502,3 +502,26 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
     } catch (ServerException e) {
         System.out.println(e.getMessage());
     }
+
+客户免验证码签约授权发送验证码
+------------------
+
+::
+
+    try {
+        client.senduthorizationVerifyCode( "15811111111");
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+
+客户免验证码签约授权确认
+------------------
+
+::
+
+    try {
+         client.authorized( "15811111111","7333");
+    } catch (ServerException e) {
+        System.out.println(e.getMessage());
+    }
+
