@@ -509,7 +509,7 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 ::
 
     try {
-        client.senduthorizationVerifyCode( "15811111111");
+        client.sendAuthorizationVerifyCode( "15811111111");
     } catch (ServerException e) {
         System.out.println(e.getMessage());
     }
