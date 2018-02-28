@@ -1186,7 +1186,7 @@ factoids           数组对象，陈述集                           可选（t
 completed          Boolean值，是否完成陈述集的上传            可选，默认为true
 signature_id       String字符串，签章id                       可选，可不填
 type               String字符串，签署类型                     可选，可不填（可选"personal"，"enterprise"）
-orgcode            String字符串，统一社会信用代码             可选（type值为"enterprise"时必填）
+orgcode            String字符串，统一社会信用代码            可选（type值为"enterprise"时必填）
 =================  ======================================= ================
 ecs_status位枚举值，签署时为"DONE"
 "DONE"状态的合同组可继续调用添加合同接口，向组内添加合同，且无需再发验证码，签署的合同默认还是创建该合同组时所上传的合同
