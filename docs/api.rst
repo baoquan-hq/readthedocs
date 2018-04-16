@@ -852,11 +852,13 @@ factoids           数组对象，陈述集                           可选（t
 completed          Boolean值，是否完成陈述集的上传            可选，默认为true
 signature_id       String字符串，签章id                       可选，可不填
 type               String字符串，签署类型                     可选，可不填（可选"personal"，"enterprise"）
+orgcode            String字符串，统一社会信用代码            可选（type值为"enterprise"时必填）
 =================  ======================================= ================
 ecs_status位枚举值，签署时为"DONE",取消时为"CANCEL"取消只能发起人取消,拒绝时为"REJECT"，
 template_id为生成的保全证书模板id（可到官网设置自己的模板），可不填，填了则identities，factoids必填
 signature_id为签章图片得id，设置则使用此签章图片签章，不设置则根据企业实名认证信息或个人实名认证信息生成签章图片
 type为签署类型，现有"personal"个人签章，使用个人证书签名；"enterprise"企业签章，默认会使用用户上传的签章图片，如未上传签章图片则根据此账户企业认证名称生成签章图片，使用企业证书签名。
+orgcode为签署企业认证时的统一社会信用代码，当一个用户有多个企业时，需要指定其某个企业签署的则传该企业统一社会信用代码
 假定payload如下所示::
 
    {
@@ -891,7 +893,8 @@ type为签署类型，现有"personal"个人签章，使用个人证书签名；
     ],
     "completed": true,
     "signature_id":"",
-    "type":""
+    "type":"",
+    "orgcode":""
 }
 
 返回的data
