@@ -756,8 +756,9 @@ title              String字符串，合同标题                    必选
 end_at             Date类型，合同可以签署的截止时间           必选
 remark             String字符串，合同备注                    必选
 userPhones         数组对象，签署合同人员电话                必选
-yourself            布尔类型，是否本人签署                可选，默认为true
+yourself            布尔类型，是否参与签署                可选，默认为true
 =================  ======================================= ================
+
 userPhones 为合同签署人列表，签署人必须在保全网已注册切实名
 假定payload如下所示::
 
@@ -770,7 +771,8 @@ userPhones 为合同签署人列表，签署人必须在保全网已注册切实
              "15822222222"
 
           ],
-          "contract_id": "4imixswKjEUU2rzintD3Vx"
+          "contract_id": "4imixswKjEUU2rzintD3Vx",
+          "yourself": "true"
     }
 
 返回的data
