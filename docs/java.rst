@@ -550,20 +550,20 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 	factoid.setUnique_id("e13912e2-ccce-47df-997a-9f44eb2c7b6c");
 	factoid.setType("qqxx"); //这里type必须为"qqxx"
 	Map<String, String> qqxxDataMap = new HashMap<String, String>();
-    qqxxFactoid.setData(loanDataMap);
-    qqxxDataMap.put("platFormId", "1");
-    qqxxDataMap.put("ywlj", "https://www.baoquan.com/");
-    qqxxDataMap.put("ywbt", "XX原文标题");
-    qqxxDataMap.put("originalType","1");
-    qqxxDataMap.put("url", "http://xx.com");
-    qqxxDataMap.put("qqbt", "XX侵权标题");
-    qqxxDataMap.put("qqwz", "XX网");
-    qqxxDataMap.put("bqgs", "数秦科技");
-    qqxxDataMap.put("qqbh", "qq001");
-    qqxxDataMap.put("qqzt", "XX网");
-    qqxxDataMap.put("matchNum", "0.99");
-    factoids.add(qqxxFactoid);
-    payload.setFactoids(factoids);
+        qqxxFactoid.setData(loanDataMap);
+        qqxxDataMap.put("platFormId", "1");
+        qqxxDataMap.put("ywlj", "https://www.baoquan.com/");
+        qqxxDataMap.put("ywbt", "XX原文标题");
+        qqxxDataMap.put("originalType","1");
+        qqxxDataMap.put("url", "http://xx.com");
+        qqxxDataMap.put("qqbt", "XX侵权标题");
+        qqxxDataMap.put("qqwz", "XX网");
+        qqxxDataMap.put("bqgs", "数秦科技");
+        qqxxDataMap.put("qqbh", "qq001");
+        qqxxDataMap.put("qqzt", "XX网");
+        qqxxDataMap.put("matchNum", "0.99");
+        factoids.add(qqxxFactoid);
+        payload.setFactoids(factoids);
 	// 调用创建保全接口，如果成功则返回保全号，如果失败则返回失败消息
 	try {
 		CreateAttestationResponse response = client.fixedEvidence(payload);
