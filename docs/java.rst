@@ -535,7 +535,7 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 	// 设置保全唯一码
 	payload.setUniqueId("e68eb8bc-3d7a-4e22-be47-d7999fb40c9a");
 	// 设置模板id
-	payload.setTemplateId("_priv_template_web_forensics_v2");
+	payload.setTemplateId("5Yhus2mVSMnQRXobRJCYgt");
 	// 设置陈述是否上传完成，如果设置成true，则后续不能继续追加陈述
 	payload.setCompleted(true);
 	// 设置保全所有者的身份标识，标识类型定义在IdentityType中
