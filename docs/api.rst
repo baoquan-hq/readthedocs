@@ -1470,21 +1470,21 @@ key 				value
 		},
 		"factoids": [
 			{
-				"unique_id": "9de7be94-a697-4398-945a-678d3f916b9f",
-				"type": "qqxx",
-				"data": {
-                            "platFormId": "1",//绑定平台Id
-                            "ywlj": "https://www.baoquan.com/",//原文链接
-                            "ywbt": "hahaha", //原文标题
-                            "originalType": "1", //原创文章标签类型
-                            "url": "https://baoquan.readthedocs.io/zh/latest/api.html#sha256-attestation-hash",//侵权URL
-                            "qqbt": "这是侵权标题",//侵权标题
-                            "qqwz": "这是侵权网站", //侵权网站
-                            "bqgs": "这是版权归属", //版权归属
-                            "qqbh": "这是侵权编号",//侵权编号
-                            "qqzt": "这是侵权主体", //侵权主体
-                            "matchNum": "侵权文章相似度"  //侵权文章相似度
-                }
+                    "unique_id": "9de7be94-a697-4398-945a-678d3f916b9f",
+                    "type": "qqxx",
+                    "data": {
+                                "platFormId": "1",//绑定平台Id
+                                "ywlj": "https://www.baoquan.com/",//原文链接
+                                "ywbt": "hahaha", //原文标题
+                                "originalType": "1", //原创文章标签类型
+                                "url": "https://baoquan.readthedocs.io/zh/latest/api.html#sha256-attestation-hash",//侵权URL
+                                "qqbt": "这是侵权标题",//侵权标题
+                                "qqwz": "这是侵权网站", //侵权网站
+                                "bqgs": "这是版权归属", //版权归属
+                                "qqbh": "这是侵权编号",//侵权编号
+                                "qqzt": "这是侵权主体", //侵权主体
+                                "matchNum": "侵权文章相似度"  //侵权文章相似度
+                    }
 			}
 		]
 
