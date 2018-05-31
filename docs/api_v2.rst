@@ -11,7 +11,7 @@
 	client.setAccessKey("fsBswNzfECKZH9aWyh47fc");
 	// 设置rsa私钥文件的绝对路径
 	client.setPemPath("path/to/rsa_private.pem");
-    client.setVersion("v2");
+	client.setVersion("v2");
 
 
 用户认证信息同步 - /users/kyc
