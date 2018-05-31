@@ -194,7 +194,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
         list.add(payloadFactoid);
         identitiesMap.put("MO", "15611111111");
         identitiesMap.put("ID", "430426198401361452");
-        client.signContractV2("2B5KcmMKg195rHhLBuNbZB", "15611111111", "5755", "DONE", "4", "400", "550","_priv_template_2", identitiesMap, list,false,"","enterprise","");
+        client.signContract("2B5KcmMKg195rHhLBuNbZB", "15611111111", "5755", "DONE", "4", "400", "550","_priv_template_2", identitiesMap, list,false,"","enterprise");
     } catch (ServerException e) {
         System.out.println(e.getMessage());
     }
