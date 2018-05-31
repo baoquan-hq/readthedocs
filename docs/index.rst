@@ -18,4 +18,5 @@
 	接口 <api>
     接口2.0 <api_v2>
 	SDK <sdk>
+    SDK2.0 <sdk2.0>
 
