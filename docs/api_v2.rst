@@ -99,43 +99,6 @@ kycEnterprise        企业认证信息的键值对
 	    }
     }
 
-下载保全文件 - /attestation/download
---------------------------------------------------------------
-
-客户上传到保全数据会经过一定的处理（比如模板渲染）生成一份保全文件，这份保全文件才是最终会hash到区块链上的数据，也是最终能通过公证处出公证书或者通过司法鉴定中心出司法鉴定书的数据。
-
-payload
-^^^^^^^^^^^^^^^
-
-=================  ================================ ================
-参数名 				描述                             是否可选
-=================  ================================ ================
-ano                String字符串，保全号               必选
-=================  ================================ ================
-
-返回的文件
-^^^^^^^^^^^^^^^
-
-该接口会返回保全文件以及文件名，文件就是http返回结果的body，文件名存放在http的header中，header的名称是Content-Disposition，header值形如::
-	
-	form-data; name=Content-Disposition; filename=5Yhus2mVSMnQRXobRJCYgt.zip
-
-以java为例::
-
-	// 此处省略使用apache http client构造http请求的过程
-	// closeableHttpResponse是一个CloseableHttpResponse实例
-	HttpEntity httpEntity = closeableHttpResponse.getEntity();
-	Header header = closeableHttpResponse.getFirstHeader(MIME.CONTENT_DISPOSITION);
-	Pattern pattern = Pattern.compile(".*filename=\"(.*)\".*");
-	Matcher matcher = pattern.matcher(header.getValue());
-	String fileName = "";
-	if (matcher.matches()) {
-		fileName = matcher.group(1);
-	}
-	FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-	IOUtils.copy(httpEntity.getContent(), fileOutputStream);
-	fileOutputStream.close();
-
 
 上传签章图片 - /contract/signature
 ----------------------
