@@ -6,12 +6,12 @@ Java
 	<dependency>
 	    <groupId>com.baoquan</groupId>
 	    <artifactId>eagle-sdk</artifactId>
-	    <version>1.0.28</version>
+	    <version>1.0.27</version>
 	</dependency>
 
 如果使用gradle，可以加入如下依赖::
 	
-	compile group: 'com.baoquan', name: 'eagle-sdk', version: '1.0.28'
+	compile group: 'com.baoquan', name: 'eagle-sdk', version: '1.0.27'
 
 初始化客户端
 ------------------
@@ -347,14 +347,10 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
         payload.setRemark("zheshixxxxxxxxxxxxxxx合同");
         payload.setTitle("ssss合同");
         payload.setContract_id("dJobmNW2FvuR9m3fHskbsV");
-        //List<String> usePhones = new ArrayList();
-        //usePhones.add("18272161340");
-        //usePhones.add("18551824340");
-        //payload.setUserPhones(usePhones);
-        Map users = new HashMap();
-        users.put("18376455527", "enterprise");
-        users.put("19288888881", "personal");
-        payload.setUsers(users);
+        List<String> usePhones = new ArrayList();
+        usePhones.add("18272161340");
+        usePhones.add("18551824340");
+        payload.setUserPhones(usePhones);
         client.setContractDetail(payload);
     } catch (ServerException e) {
         System.out.println(e.getMessage());
@@ -366,7 +362,7 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 ::
 
     try {
-          client.sendVerifyCode("hspH56P7nZU4XSJRWWGvpy", "15811111111","personal");
+          client.sendVerifyCode("hspH56P7nZU4XSJRWWGvpy", "15811111111");
     } catch (ServerException e) {
         System.out.println(e.getMessage());
     }
