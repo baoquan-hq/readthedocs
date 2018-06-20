@@ -1399,6 +1399,8 @@ template_id为证据固定模板ID
                 "bqgs": "这是版权归属",
                 "qqbh": "这是侵权编号",
                 "qqzt": "这是侵权主体",
+		"oriSubDate": "原文发布时间",//格式为yyyy-MM-dd HH:mm
+		"pirSubDate": "侵权文章发布时间",//格式为yyyy-MM-dd HH:mm
                 "matchNum": "侵权文章相似度"
 		}
 	}
@@ -1481,6 +1483,8 @@ key 				value
                                 "bqgs": "这是版权归属", //版权归属
                                 "qqbh": "这是侵权编号",//侵权编号
                                 "qqzt": "这是侵权主体", //侵权主体
+				"oriSubDate": "2018-06-01 19:20",//格式为yyyy-MM-dd HH:mm
+				"pirSubDate": "2018-06-02 19:20",//格式为yyyy-MM-dd HH:mm
                                 "matchNum": "侵权文章相似度"  //侵权文章相似度
                     }
 			}
