@@ -561,6 +561,9 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
         qqxxDataMap.put("bqgs", "数秦科技");
         qqxxDataMap.put("qqbh", "qq001");
         qqxxDataMap.put("qqzt", "XX网");
+	qqxxDataMap.put("oriSubDate", "2018-01-01 06:20");
+	qqxxDataMap.put("pirSubDate", "2018-01-02 06:20");
+        qqxxDataMap.put("qqzt", "XX网");
         qqxxDataMap.put("matchNum", "0.99");
         factoids.add(qqxxFactoid);
         payload.setFactoids(factoids);
