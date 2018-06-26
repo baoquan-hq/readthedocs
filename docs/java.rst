@@ -552,6 +552,7 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 	Map<String, String> qqxxDataMap = new HashMap<String, String>();
         qqxxFactoid.setData(loanDataMap);
         qqxxDataMap.put("platFormId", "1");
+	qqxxDataMap.put("nickname", "用户昵称");
         qqxxDataMap.put("ywlj", "https://www.baoquan.com/");
         qqxxDataMap.put("ywbt", "XX原文标题");
         qqxxDataMap.put("originalType","1");
