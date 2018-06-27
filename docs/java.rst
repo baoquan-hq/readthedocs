@@ -572,3 +572,25 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 		System.out.println(e.getMessage());
 	}
 
+添加原创
+------------------
+
+::
+
+	OriginalArticlePayload payload = new OriginalArticlePayload();
+        // 设置原创认证唯一码
+        payload.setUniqueId(UUID.randomUUID().toString());
+        payload.setLinkUrl("http://www.baidu.com");
+        payload.setNickName("1111");
+        payload.setOriginalType("1,2");
+        payload.setPlatformCode("1");
+        payload.setSubDate("2018-06-27 15:22");
+        payload.setTitle("文章标题");
+	// 调用添加原创接口，如果成功则返回原创文章Id，如果失败则返回失败消息
+	try {
+		OriginalArticleResponse response = client.createOriginalArticle(payload);
+		 System.out.print(response.getOriginalId());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
