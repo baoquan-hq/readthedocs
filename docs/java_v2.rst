@@ -272,6 +272,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
         qqxxDataMap.put("qqbt", "XX侵权标题");
         qqxxDataMap.put("qqwz", "XX网");
         qqxxDataMap.put("bqgs", "数秦科技");
+	qqxxDataMap.put("cardNo", "342425199111103230");//证件号码（身份证或者统一社会代码）
         qqxxDataMap.put("qqbh", "qq001");
         qqxxDataMap.put("qqzt", "XX网");
 	qqxxDataMap.put("oriSubDate", "2018-01-01 06:20");//原文发布时间
