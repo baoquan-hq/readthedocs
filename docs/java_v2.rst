@@ -310,3 +310,21 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	} catch (ServerException e) {
 		System.out.println(e.getMessage());
 	}
+
+客户免验证码签约授权发送验证码
+------------------
+
+::
+
+	   public void testSendAuthorizationVerifyCode() throws ServerException {
+        client.sendAuthorizationVerifyCode("15811111111", "persoanl");
+    }
+
+客户免验证码签约授权确认
+------------------
+
+::
+
+    public void testauthorized() throws ServerException {
+        client.authorized("15811111111", "7333", "personal");
+    }
