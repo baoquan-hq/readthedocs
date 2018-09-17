@@ -69,6 +69,8 @@ accountName         企业开户名称                        必选
 bank                企业开户银行                        必选
 bankAccount         企业银行账号                        必选
 orgcode             统一社会信用代码                    必选
+contactCode             联系人身份证号码                    必选
+contactName            联系人姓名                    必选
 businessFile        营业执照                            必选
 =================  ================================ ================
 一个用户只能关联一个企业
