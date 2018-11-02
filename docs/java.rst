@@ -197,6 +197,49 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 		System.out.println(e.getMessage());
 	}
 
+网页取证
+------------------
+
+::
+
+        String url = "http://www.qq.com/";
+        CreateAttestationPayload payload = new CreateAttestationPayload();
+        // 设置保全唯一码
+        payload.setUniqueId(UUID.randomUUID().toString());
+        // 设置模板id
+        payload.setTemplateId("jcEGvWNn88XVzjdmGu5GDr");
+        // 设置陈述是否上传完成，如果设置成true，则后续不能继续追加陈述
+        payload.setCompleted(true);
+        // 设置保全所有者的身份标识，标识类型定义在IdentityType中
+
+        Map<IdentityType, String> identities = new HashMap<IdentityType, String>();
+        identities.put(IdentityType.ID, "429006198507104214");
+        identities.put(IdentityType.MO, "18767106890");
+        payload.setIdentities(identities);
+
+
+        List<Factoid> factoids = new ArrayList<Factoid>();
+        Factoid qqxxFactoid = new Factoid();
+        qqxxFactoid.setUnique_id(UUID.randomUUID().toString() + new Date().getTime());
+
+        qqxxFactoid.setType("qqxx");
+        payload.setUrl(url);
+        Map<String, String> loanDataMap = new HashMap<String, String>();
+        qqxxFactoid.setData(loanDataMap);
+        loanDataMap.put("url", url);
+        qqxxFactoid.setUnique_id(randomUniqueId());
+        qqxxFactoid.setType("website");
+        qqxxFactoid.setData(loanDataMap);
+        factoids.add(qqxxFactoid);
+        payload.setFactoids(factoids);
+        try {
+	        CreateAttestationResponse response = client.createAttestationWithUrl(payload, url);
+            System.out.print(response.getData().getNo());
+            System.out.println(response.getData().getNo());
+         } catch (ServerException e) {
+            System.out.println(e.getMessage());
+         }
+
 
 用户认证信息同步
 ------------------
