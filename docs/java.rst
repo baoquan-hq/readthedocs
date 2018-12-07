@@ -1,4 +1,4 @@
-Java
+Java_v2
 =================
 
 如果使用maven，可以加入如下依赖::
@@ -6,12 +6,12 @@ Java
 	<dependency>
 	    <groupId>com.baoquan</groupId>
 	    <artifactId>eagle-sdk</artifactId>
-	    <version>1.0.27</version>
+	    <version>2.0.2</version>
 	</dependency>
 
 如果使用gradle，可以加入如下依赖::
 	
-	compile group: 'com.baoquan', name: 'eagle-sdk', version: '1.0.27'
+	compile group: 'com.baoquan', name: 'eagle-sdk', version: '2.0.2'
 
 初始化客户端
 ------------------
@@ -24,7 +24,9 @@ Java
 	// 设置access key
 	client.setAccessKey("fsBswNzfECKZH9aWyh47fc"); 
 	// 设置rsa私钥文件的绝对路径
-	client.setPemPath("path/to/rsa_private.pem"); 
+	client.setPemPath("path/to/rsa_private.pem");
+	// 设置版本
+	client.setVersion("v2");
 
 rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PRIVATE KEY-----** 结尾，比如::
 
@@ -49,9 +51,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 ^^^^^^^^^^^^^^^
 
 还有些其它可选的初始化设置，比如设置api版本，设置request id生成器，默认情况下你无需进行这些设置::
-	
-	// 设置api版本
-	client.setVersion("v1") 
+
 	// 设置request id生成器，生成器需要实现RequestIdGenerator接口中的createRequestId方法
 	client.setRequestIdGenerator(CustomRequestGenerator) 
 
@@ -75,9 +75,9 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	// 设置保全唯一码
 	payload.setUniqueId("e68eb8bc-3d7a-4e22-be47-d7999fb40c9a");
 	// 设置模板id
-	payload.setTemplateId("5Yhus2mVSMnQRXobRJCYgt"); 
+	payload.setTemplateId("5Yhus2mVSMnQRXobRJCYgt");
 	// 设置陈述是否上传完成，如果设置成true，则后续不能继续追加陈述
-	payload.setCompleted(false); 
+	payload.setCompleted(false);
 	// 设置保全所有者的身份标识，标识类型定义在IdentityType中
 	Map<IdentityType, String> identities = new HashMap<>();
 	identities.put(IdentityType.ID, "42012319800127691X");
@@ -240,6 +240,35 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
             System.out.println(e.getMessage());
          }
 
+获取保全数据
+------------------
+
+::
+
+	try {
+		GetAttestationResponse response = client.getAttestation("DB0C8DB14E3C44C7B9FBBE30EB179241", null);
+		System.out.println(response.getData());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
+getAttestation有两个参数，第1个参数ano是保全号，第二个参数fields是一个数组用于设置可选的返回字段
+
+下载保全文件
+------------------
+
+::
+
+	try {
+		DownloadFile downloadFile = client.downloadAttestation("7FF4E8F6A6764CD0895146581B2B28AA");
+
+		FileOutputStream fileOutputStream = new FileOutputStream(downloadFile.getFileName());
+		IOUtils.copy(downloadFile.getFile(), fileOutputStream);
+		fileOutputStream.close();
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
 
 用户认证信息同步
 ------------------
@@ -272,48 +301,6 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 		System.out.println(e.getMessage());
 	}
 
-
-获取保全数据
-------------------
-
-::
-
-	try {
-		GetAttestationResponse response = client.getAttestation("DB0C8DB14E3C44C7B9FBBE30EB179241", null);
-		System.out.println(response.getData());
-	} catch (ServerException e) {
-		System.out.println(e.getMessage());
-	}	
-
-getAttestation有两个参数，第1个参数ano是保全号，第二个参数fields是一个数组用于设置可选的返回字段
-
-下载保全文件
-------------------
-
-::
-
-	try {
-		DownloadFile downloadFile = client.downloadAttestation("7FF4E8F6A6764CD0895146581B2B28AA");
-
-		FileOutputStream fileOutputStream = new FileOutputStream(downloadFile.getFileName());
-		IOUtils.copy(downloadFile.getFile(), fileOutputStream);
-		fileOutputStream.close();
-	} catch (ServerException e) {
-		System.out.println(e.getMessage());
-	}
-
-
-保全访问链接
-------------------
-
-::
-
-    try {
-        String accessUrl = client.attestationAccessUrl("B44FBD41439649758C6E0DC517A53F1D");
-        System.out.println(accessUrl);
-    } catch (ServerException e) {
-        System.out.println(e.getMessage());
-    }
 
 
 上传签章图片
@@ -363,6 +350,15 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 
     try {
           ContractPayload payload = new ContractPayload();
+          Calendar calendar = Calendar.getInstance();
+          Date date = new Date(System.currentTimeMillis());
+          calendar.setTime(date);
+          calendar.add(Calendar.YEAR, +1);
+          date = calendar.getTime();
+          System.out.println(date);
+          payload.setEnd_at(date);
+          payload.setRemark("sas");
+          payload.setTitle("ssss合同");
           InputStream inputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
           ByteArrayBody byteArrayBody = new ByteArrayBody(IOUtils.toByteArray(inputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
           Map<String, List<ByteArrayBody>> byteStreamBodyMap = new HashMap<String, List<ByteArrayBody>>();
@@ -373,31 +369,6 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
         System.out.println(e.getMessage());
     }
 
-设置合同详情
-------------------
-
-::
-
-    try {
-            ContractPayload payload = new ContractPayload();
-        Calendar calendar = Calendar.getInstance();
-        Date date = new Date(System.currentTimeMillis());
-        calendar.setTime(date);
-        calendar.add(Calendar.YEAR, +1);
-        date = calendar.getTime();
-        System.out.println(date);
-        payload.setEnd_at(date);
-        payload.setRemark("zheshixxxxxxxxxxxxxxx合同");
-        payload.setTitle("ssss合同");
-        payload.setContract_id("dJobmNW2FvuR9m3fHskbsV");
-        List<String> usePhones = new ArrayList();
-        usePhones.add("18272161340");
-        usePhones.add("18551824340");
-        payload.setUserPhones(usePhones);
-        client.setContractDetail(payload);
-    } catch (ServerException e) {
-        System.out.println(e.getMessage());
-    }
 
 发送验证码
 ------------------
@@ -405,7 +376,7 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 ::
 
     try {
-          client.sendVerifyCode("hspH56P7nZU4XSJRWWGvpy", "15811111111");
+          client.sendVerifyCode("hspH56P7nZU4XSJRWWGvpy", "15811111111","personal");
     } catch (ServerException e) {
         System.out.println(e.getMessage());
     }
@@ -416,7 +387,7 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 ::
 
     try {
-       Map<String, String> identitiesMap = new HashMap<String, String>();
+        Map<String, String> identitiesMap = new HashMap<String, String>();
         List<PayloadFactoid> list = new ArrayList<PayloadFactoid>();
         PayloadFactoid payloadFactoid = new PayloadFactoid();
         LinkedHashMap<String , Object> linkedHashMap = new LinkedHashMap<String, Object>();
@@ -425,9 +396,9 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
         payloadFactoid.setType("product");
         payloadFactoid.setData(linkedHashMap);
         list.add(payloadFactoid);
-        identitiesMap.put("MO","15611111111");
+        identitiesMap.put("MO", "15611111111");
         identitiesMap.put("ID", "430426198401361452");
-        client.signContract("vcVuhR2e1odTShZnJug7cg", "15866666666", "2560", "DONE", "4", "400", "550","_priv_template_2", identitiesMap, list,false,null,null);
+        client.signContract("2B5KcmMKg195rHhLBuNbZB", "15611111111", "5755", "DONE", "4", "400", "550","_priv_template_2", identitiesMap, list,false,"","enterprise");
     } catch (ServerException e) {
         System.out.println(e.getMessage());
     }
@@ -458,7 +429,6 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
     
 签署合同下载
 ------------------
-
 ::
 
 	try {
@@ -471,90 +441,87 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 		System.out.println(e.getMessage());
 	}
 
-创建合同组
+
+证据固定保全存证
 ------------------
 
 ::
 
-    try {
-         ContractPayload payload = new ContractPayload();
-         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("contract.pdf");
-         ByteArrayBody byteArrayBody = new ByteArrayBody(IOUtils.toByteArray(inputStream), ContentType.DEFAULT_BINARY, "contract.pdf");
-         Map<String, List<ByteArrayBody>> byteStreamBodyMap = new HashMap<String, List<ByteArrayBody>>();
-         byteStreamBodyMap.put("0", Collections.singletonList(byteArrayBody));
-         CreateGroupResponse u = client.createGroup(payload, byteStreamBodyMap);
-         System.out.println(u.getGroupId());
-    } catch (ServerException e) {
-        System.out.println(e.getMessage());
-    }
+	CreateAttestationPayload payload = new CreateAttestationPayload();
+	// 设置保全唯一码
+	payload.setUniqueId("e68eb8bc-3d7a-4e22-be47-d7999fb40c9a");
+	// 设置模板id
+	payload.setTemplateId("5Yhus2mVSMnQRXobRJCYgt");
+	// 设置陈述是否上传完成，如果设置成true，则后续不能继续追加陈述
+	payload.setCompleted(true);
+	// 设置保全所有者的身份标识，标识类型定义在IdentityType中
+	Map<IdentityType, String> identities = new HashMap<>();
+	identities.put(IdentityType.ID, "42012319800127691X");
+	identities.put(IdentityType.MO, "15857112383");
+	payload.setIdentities(identities);
+	// 添加证据固定陈述对象列表
+	List<Factoid> factoids = new ArrayList<>();
+	// 添加qqxx陈述
+	Factoid factoid = new Factoid();
+	factoid.setUnique_id("e13912e2-ccce-47df-997a-9f44eb2c7b6c");
+	factoid.setType("qqxx"); //这里type必须为"qqxx"
+	Map<String, String> qqxxDataMap = new HashMap<String, String>();
+        qqxxFactoid.setData(loanDataMap);
+        qqxxDataMap.put("platFormId", "1");
+	qqxxDataMap.put("nickname", "用户昵称");
+        qqxxDataMap.put("ywlj", "https://www.baoquan.com/");
+        qqxxDataMap.put("ywbt", "XX原文标题");
+        qqxxDataMap.put("originalType","1");
+        qqxxDataMap.put("url", "http://xx.com");
+        qqxxDataMap.put("qqbt", "XX侵权标题");
+        qqxxDataMap.put("qqwz", "XX网");
+        qqxxDataMap.put("bqgs", "数秦科技");
+	qqxxDataMap.put("cardNo", "342425199111103230");//证件号码（身份证或者统一社会代码）
+        qqxxDataMap.put("qqbh", "qq001");
+        qqxxDataMap.put("qqzt", "XX网");
+	qqxxDataMap.put("oriSubDate", "2018-01-01 06:20");//原文发布时间
+	qqxxDataMap.put("pirSubDate", "2018-01-02 06:20");//侵权文章发布时间
+        qqxxDataMap.put("qqzt", "XX网");
+        qqxxDataMap.put("matchNum", "0.99");
+        factoids.add(qqxxFactoid);
+        payload.setFactoids(factoids);
+	// 调用创建保全接口，如果成功则返回保全号，如果失败则返回失败消息
+	try {
+		CreateAttestationResponse response = client.fixedEvidence(payload);
+		System.out.println(response.getData().getNo());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
 
-设置合同组详情
+添加原创
 ------------------
 
 ::
 
-    try {
-         ContractPayload payload = new ContractPayload();
-        Calendar calendar = Calendar.getInstance();
-        Date date = new Date(System.currentTimeMillis());
-        calendar.setTime(date);
-        calendar.add(Calendar.YEAR, +1);
-        date = calendar.getTime();
-        System.out.println(date);
-        payload.setEnd_at(date);
-	payload.setRemark("zheshixxxxxxxxxxxxxxx合同");
-        payload.setTitle("ssss合同");
-        payload.setGroup_id("kRcDGVqwxrKmjG1oBjH5BN");
-        List<String> usePhones = new ArrayList();
-        usePhones.add("18322222222");
-        payload.setUserPhones(usePhones);
-        client.setContractGroupDetail(payload);
-    } catch (ServerException e) {
-        System.out.println(e.getMessage());
-    }
-    
-签署合同并设置合同组状态
-------------------
-
-::
-
-    try {
-       Map<String, String> identitiesMap = new HashMap<String, String>();
-        List<PayloadFactoid> list = new ArrayList<PayloadFactoid>();
-        PayloadFactoid payloadFactoid = new PayloadFactoid();
-        LinkedHashMap<String , Object> linkedHashMap = new LinkedHashMap<String, Object>();
-        linkedHashMap.put("userTruename","张三");
-        linkedHashMap.put("address", "hangzhou");
-        payloadFactoid.setType("product");
-        payloadFactoid.setData(linkedHashMap);
-        list.add(payloadFactoid);
-        identitiesMap.put("MO","15611111111");
-        identitiesMap.put("ID", "430426198401361452");
-        client.setContractGroupStatus("kRcDGVqwxrKmjG1oBjH5BN", "18311111111", "3986", "DONE", "4", "400", "550","_priv_template_2", identitiesMap, list,false,null,null);
-    } catch (ServerException e) {
-        System.out.println(e.getMessage());
-    }   
-    
-合同组签署发送验证码
-------------------
-
-::
-
-    try {
-          client.sendVerifyCodeForGroup("kRcDGVqwxrKmjG1oBjH5BN", "18311111111");
-    } catch (ServerException e) {
-        System.out.println(e.getMessage());
-    }
+	OriginalArticlePayload payload = new OriginalArticlePayload();
+        // 设置原创认证唯一码
+        payload.setUniqueId(UUID.randomUUID().toString());
+        payload.setLinkUrl("http://www.baidu.com");
+        payload.setNickName("1111");
+        payload.setOriginalType("1,2");
+        payload.setPlatformCode("1");
+        payload.setSubDate("2018-06-27 15:22");
+        payload.setTitle("文章标题");
+	// 调用添加原创接口，如果成功则返回原创文章Id，如果失败则返回失败消息
+	try {
+		OriginalArticleResponse response = client.createOriginalArticle(payload);
+		 System.out.print(response.getOriginalId());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
 
 客户免验证码签约授权发送验证码
 ------------------
 
 ::
 
-    try {
-        client.sendAuthorizationVerifyCode( "15811111111");
-    } catch (ServerException e) {
-        System.out.println(e.getMessage());
+	   public void testSendAuthorizationVerifyCode() throws ServerException {
+        client.sendAuthorizationVerifyCode("15811111111", "persoanl");
     }
 
 客户免验证码签约授权确认
@@ -562,11 +529,6 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 
 ::
 
-    try {
-         client.authorized( "15811111111","7333");
-    } catch (ServerException e) {
-        System.out.println(e.getMessage());
+    public void testauthorized() throws ServerException {
+        client.authorized("15811111111", "7333", "personal");
     }
-
-
-
