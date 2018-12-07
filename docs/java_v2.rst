@@ -6,12 +6,12 @@ Java_v2
 	<dependency>
 	    <groupId>com.baoquan</groupId>
 	    <artifactId>eagle-sdk</artifactId>
-	    <version>2.0.0</version>
+	    <version>2.0.2</version>
 	</dependency>
 
 如果使用gradle，可以加入如下依赖::
 	
-	compile group: 'com.baoquan', name: 'eagle-sdk', version: '2.0.0'
+	compile group: 'com.baoquan', name: 'eagle-sdk', version: '2.0.2'
 
 初始化客户端
 ------------------
@@ -64,6 +64,209 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 	}
 
 客户端初始化完成后即可调用客户端中的方法发送请求
+
+创建保全
+------------------
+
+::
+
+	CreateAttestationPayload payload = new CreateAttestationPayload();
+	// 设置保全唯一码
+	payload.setUniqueId("e68eb8bc-3d7a-4e22-be47-d7999fb40c9a");
+	// 设置模板id
+	payload.setTemplateId("5Yhus2mVSMnQRXobRJCYgt");
+	// 设置陈述是否上传完成，如果设置成true，则后续不能继续追加陈述
+	payload.setCompleted(false);
+	// 设置保全所有者的身份标识，标识类型定义在IdentityType中
+	Map<IdentityType, String> identities = new HashMap<>();
+	identities.put(IdentityType.ID, "42012319800127691X");
+	identities.put(IdentityType.MO, "15857112383");
+	payload.setIdentities(identities);
+	// 添加陈述对象列表
+	List<Factoid> factoids = new ArrayList<>();
+	// 添加product陈述
+	Factoid factoid = new Factoid();
+	Product product = new Product();
+	product.setName("xxx科技有限公司");
+	product.setDescription("p2g理财平台");
+	factoid.setUnique_id("e13912e2-ccce-47df-997a-9f44eb2c7b6c");
+	factoid.setType("product");
+	factoid.setData(product);
+	factoids.add(factoid);
+	// 添加user陈述
+	factoid = new Factoid();
+	User user = new User();
+	user.setName("张三");
+	user.setRegistered_at("1466674609");
+	user.setUsername("tom");
+	user.setPhone_number("13452345987");
+	factoid.setUnique_id("5bf54bc4-ec69-4a5d-b6e4-a3f670f795f3");
+	factoid.setType("user");
+	factoid.setData(user);
+	factoids.add(factoid);
+	payload.setFactoids(factoids);
+	// 调用创建保全接口，如果成功则返回保全号，如果失败则返回失败消息
+	try {
+		CreateAttestationResponse response = client.createAttestation(payload);
+		System.out.println(response.getData().getNo());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
+如果创建保全时需要给陈述上传对应的附件::
+
+	// 创建3个附件，每个附件都是ByteArrayBody实例，ContentType必须为DEFAULT_BINARY，并且需要设置filename
+	InputStream inputStream0 = getClass().getClassLoader().getResourceAsStream("seal.png");
+	ByteArrayBody byteArrayBody0 = new ByteArrayBody(IOUtils.toByteArray(inputStream0), ContentType.DEFAULT_BINARY, "seal.png");
+	InputStream inputStream1 = getClass().getClassLoader().getResourceAsStream("seal.png");
+	ByteArrayBody byteArrayBody1 = new ByteArrayBody(IOUtils.toByteArray(inputStream1), ContentType.DEFAULT_BINARY, "seal.png");
+	InputStream inputStream2 = getClass().getClassLoader().getResourceAsStream("contract.pdf");
+	ByteArrayBody byteArrayBody2 = new ByteArrayBody(IOUtils.toByteArray(inputStream2), ContentType.DEFAULT_BINARY, "contract.pdf");
+	// 创建附件map，key为factoids中的角标，此处设置factoids中第1个factoid有1个附件，第2个factoid有2两个附件
+	Map<String, List<ByteArrayBody>> attachments = new HashMap<>();
+	attachments.put("0", Collections.singletonList(byteArrayBody0));
+	attachments.put("1", Arrays.asList(byteArrayBody1, byteArrayBody2));
+	// 此处省略payload的创建
+	try {
+		CreateAttestationResponse response = client.createAttestation(payload, attachments);
+		System.out.println(response.getData().getNo());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
+追加陈述
+------------------
+
+::
+
+	AddFactoidsPayload addFactoidsPayload = new AddFactoidsPayload();
+	// 设置保全号
+	addFactoidsPayload.setAno("7F189BBB5FA1451EA8601D0693E36FE7");
+	// 添加陈述对象
+	factoids = new ArrayList<>();
+	factoid = new Factoid();
+	User user = new User();
+	user.setName("张三");
+	user.setRegistered_at("1466674609");
+	user.setUsername("tom");
+	user.setPhone_number("13452345987");
+	factoid.setUnique_id("5bf54bc4-ec69-4a5d-b6e4-a3f670f795f3");
+	factoid.setType("user");
+	factoid.setData(user);
+	factoids.add(factoid);
+	addFactoidsPayload.setFactoids(factoids);
+	// 调用追加陈述接口，如果成功则返回的success为true，如果失败则返回失败消息
+	try {
+		AddFactoidsResponse response = client.addFactoids(addFactoidsPayload);
+		System.out.println(response.getData().isSuccess());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
+追加陈述的时候同样能为陈述上传附件，跟创建保全为陈述上传附件一样。
+
+创建保全(sha256)
+------------------
+
+::
+
+	CreateAttestationPayload payload = new CreateAttestationPayload();
+	//模板必须为系统提供的文件HASH模板的子模板。
+	payload.setTemplateId("filehash");
+	payload.setUniqueId(randomUniqueId());
+	Map<IdentityType, String> identities = new HashMap<IdentityType, String>();
+	identities.put(IdentityType.MO, "15857110000");
+	payload.setIdentities(identities);
+	List<Factoid> factoids = new ArrayList<Factoid>();
+	Factoid factoid = new Factoid();
+	factoid.setUnique_id(randomUniqueId());
+	factoid.setType("file");
+	Map<String,String> map = new HashMap<String, String>();
+	factoid.setData(map);
+	map.put("owner_name","李三");
+	map.put("owner_id","330124199501017791");
+	factoids.add(factoid);
+	payload.setFactoids(factoids);
+	// 调用创建保全接口，如果成功则返回保全号，如果失败则返回失败消息
+	try {
+		String sha256 = "654c71176b207401445fdd471f5e023f65af50d7361bf828e5b1c19c89b977b0";
+		CreateAttestationResponse response = client.createAttestationWithSha256(payload,sha256);
+		System.out.println(response.getData().getNo());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
+网页取证
+------------------
+
+::
+
+        String url = "http://www.qq.com/";
+        CreateAttestationPayload payload = new CreateAttestationPayload();
+        // 设置保全唯一码
+        payload.setUniqueId(UUID.randomUUID().toString());
+        // 设置模板id
+        payload.setTemplateId("jcEGvWNn88XVzjdmGu5GDr");
+        // 设置陈述是否上传完成，如果设置成true，则后续不能继续追加陈述
+        payload.setCompleted(true);
+        // 设置保全所有者的身份标识，标识类型定义在IdentityType中
+
+        Map<IdentityType, String> identities = new HashMap<IdentityType, String>();
+        identities.put(IdentityType.ID, "429006198507104214");
+        identities.put(IdentityType.MO, "18767106890");
+        payload.setIdentities(identities);
+
+
+        List<Factoid> factoids = new ArrayList<Factoid>();
+        Factoid qqxxFactoid = new Factoid();
+        qqxxFactoid.setUnique_id(UUID.randomUUID().toString() + new Date().getTime());
+
+        qqxxFactoid.setType("qqxx");
+        payload.setUrl(url);
+        Map<String, String> loanDataMap = new HashMap<String, String>();
+        qqxxFactoid.setData(loanDataMap);
+        loanDataMap.put("url", url);
+        qqxxFactoid.setUnique_id(randomUniqueId());
+        qqxxFactoid.setType("website");
+        qqxxFactoid.setData(loanDataMap);
+        factoids.add(qqxxFactoid);
+        payload.setFactoids(factoids);
+        try {
+	        CreateAttestationResponse response = client.createAttestationWithUrl(payload, url);
+            System.out.print(response.getData().getNo());
+            System.out.println(response.getData().getNo());
+         } catch (ServerException e) {
+            System.out.println(e.getMessage());
+         }
+
+获取保全数据
+------------------
+
+::
+
+	try {
+		GetAttestationResponse response = client.getAttestation("DB0C8DB14E3C44C7B9FBBE30EB179241", null);
+		System.out.println(response.getData());
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
+
+getAttestation有两个参数，第1个参数ano是保全号，第二个参数fields是一个数组用于设置可选的返回字段
+
+下载保全文件
+------------------
+
+::
+
+	try {
+		DownloadFile downloadFile = client.downloadAttestation("7FF4E8F6A6764CD0895146581B2B28AA");
+
+		FileOutputStream fileOutputStream = new FileOutputStream(downloadFile.getFileName());
+		IOUtils.copy(downloadFile.getFile(), fileOutputStream);
+		fileOutputStream.close();
+	} catch (ServerException e) {
+		System.out.println(e.getMessage());
+	}
 
 
 用户认证信息同步
