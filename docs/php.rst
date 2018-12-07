@@ -65,7 +65,7 @@ rsa私钥文件应该以 **-----BEGIN PRIVATE KEY-----** 开头和 **-----END PR
 还有些其它可选的初始化设置，比如设置api版本，设置request id生成器，默认情况下你无需进行这些设置::
 
 	// 设置api版本
-	$client->setVersion('v1');
+	$client->setVersion('v2');
 	// 设置request id生成器，生成器需要实现RequestIdGenerator接口中的createRequestId方法
 	$client->setRequestIdGenerator(CustomRequestGenerator);
 

@@ -47,7 +47,7 @@
 	String payload = "{\"template_id\": \"2hSWTZ4oqVEJKAmK2RiyT4\"}";
 
 	// API path
-	String apiVersion = "v1";
+	String apiVersion = "v2";
 	String apiName = "attestations";
 	String path = String.format("/api/%s/%s", apiVersion, apiName);
 

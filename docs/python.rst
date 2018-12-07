@@ -46,7 +46,7 @@ rsa私钥文件应该以 **-----BEGIN RSA PRIVATE KEY-----** 开头和 **-----EN
 还有些其它可选的初始化设置，比如设置api版本，设置request id生成器，默认情况下你无需进行这些设置::
 	
 	// 设置api版本
-	client.version = 'v1' 
+	client.version = 'v2'
 	// 设置request id生成器，生成器必须返回一个长度不超过256位的唯一字符串
 	// sdk中默认的request id生成器是uuid.uuid4
 	def custom_request_id_generator():
