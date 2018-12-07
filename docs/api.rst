@@ -1,6 +1,21 @@
 接口
 ===============
 
+初始化客户端
+------------------
+::
+	BaoquanClient client = new BaoquanClient();
+	// 设置api地址，比如保全网的测试环境地址
+	client.setHost("https://baoquan.com");
+	// 设置access key
+	client.setAccessKey("fsBswNzfECKZH9aWyh47fc");
+	// 设置rsa私钥文件的绝对路径
+	client.setPemPath("path/to/rsa_private.pem");
+	client.setVersion("v2");
+
+接口
+===============
+
 保全 - /attestations
 ----------------------
 
@@ -41,9 +56,9 @@ type是客户定义的陈述名称，data是陈述的字段值，如下图所示
 
 模板中包含common和hash两个陈述。common中的attestation_no(保全号)、attestation_at(保全时间)、product_name(产品名称)、organization_name(组织名称)在模板渲染时由保全网提供。hash这个陈述是客户自己定义的，所以需要客户通过API上传。
 
-.. note:: 
+.. note::
 	在添加陈述对象是要保证陈述对象跟编辑模板时的要求一致。以下几种情况会导致保全失败：
-	
+
 	- 上传了模板中没有的陈述对象，比如模板中没有type为product的对象却上传了。
 	- 模板中有字段是必要的，但是完成陈述上传时并没有上传该字段，比如user.name需要上传且不能为空，
 	  但是没有上传type为user的data或者data中没有name这个字段。
@@ -142,7 +157,7 @@ form表单形式上传多个附件::
 		"completed": true,
 		"attachments": {
 			"0": [
-				"checkSum1", 
+				"checkSum1",
 				{
 					"checksum": "checkSum2",
 					"sign": {
@@ -188,9 +203,9 @@ attachments中的key对应的是factoids数组的下标，比如"0"对应的是f
 调用保全接口成功后会返回保全号
 
 =================  ================================
-字段名 				描述                            
+字段名 				描述
 =================  ================================
-no                 String字符串，保全号                                         
+no                 String字符串，保全号
 =================  ================================
 
 例如::
@@ -249,9 +264,9 @@ factoids具体描述请参考保全接口，
 ^^^^^^^^^^^^^^
 
 =================  ================================
-字段名 				描述                            
+字段名 				描述
 =================  ================================
-success            是否成功，布尔值                                           
+success            是否成功，布尔值
 =================  ================================
 
 例如::
@@ -309,9 +324,9 @@ file这个陈述为系统默认陈述，数据需要客户通过API上传。
 	- 该接口不接收附件。
 	- 调用该接口时，模板必须为系统提供的文件HASH模板的子模板。
 
-.. note:: 
+.. note::
 	在添加陈述对象是要保证陈述对象跟编辑模板时的要求一致。以下几种情况会导致保全失败：
-	
+
 	- 上传了模板中没有的陈述对象，比如模板中没有type为product的对象却上传了。
 	- 模板必须为系统提供的文件HASH模板的子模板，否则，上传失败。
 
@@ -348,9 +363,9 @@ file这个陈述为系统默认陈述，数据需要客户通过API上传。
 调用保全接口成功后会返回保全号
 
 =================  ================================
-字段名 				描述                            
+字段名 				描述
 =================  ================================
-no                 String字符串，保全号                                         
+no                 String字符串，保全号
 =================  ================================
 
 例如::
@@ -459,15 +474,15 @@ fields             数组对象，希望返回的字段            可选，默�
 ^^^^^^^^^^^^^^
 
 =================  ================================================================
-字段名 				描述                            
+字段名 				描述
 =================  ================================================================
 no                 保全号
-template_id        模板id 
+template_id        模板id
 identities         身份标识
 factoids           陈述列表
 completed          陈述是否上传完成
 attachments        附件列表
-blockchain_hash    区块链hash，当尚未hash到区块链时为空                                          
+blockchain_hash    区块链hash，当尚未hash到区块链时为空
 =================  ================================================================
 
 attachments是一个数组，其中key是factoids中陈述的角标，value是一个附件id数组
@@ -516,7 +531,7 @@ attachments是一个数组，其中key是factoids中陈述的角标，value是�
 	}
 
 （2）当fields为一个空数组时不会获取identities、factoids和attachments的值，返回的结果例如::
-	
+
 	{
 		"request_id": "2XiTgZ2oVrBgGqKQ1ruCKh",
 		"data": {
@@ -551,6 +566,43 @@ attachments是一个数组，其中key是factoids中陈述的角标，value是�
 			"blockchain_hash": "s5j4SZpEKQXQ7r6C2F81ZJXosNjzrPJsXKywAu"
 		}
 	}
+
+下载保全文件 - /attestation/download
+--------------------------------------------------------------
+
+客户上传到保全数据会经过一定的处理（比如模板渲染）生成一份保全文件，这份保全文件才是最终会hash到区块链上的数据，也是最终能通过公证处出公证书或者通过司法鉴定中心出司法鉴定书的数据。
+
+payload
+^^^^^^^^^^^^^^^
+
+=================  ================================ ================
+参数名 				描述                             是否可选
+=================  ================================ ================
+ano                String字符串，保全号               必选
+=================  ================================ ================
+
+返回的文件
+^^^^^^^^^^^^^^^
+
+该接口会返回保全文件以及文件名，文件就是http返回结果的body，文件名存放在http的header中，header的名称是Content-Disposition，header值形如::
+
+	form-data; name=Content-Disposition; filename=5Yhus2mVSMnQRXobRJCYgt.zip
+
+以java为例::
+
+	// 此处省略使用apache http client构造http请求的过程
+	// closeableHttpResponse是一个CloseableHttpResponse实例
+	HttpEntity httpEntity = closeableHttpResponse.getEntity();
+	Header header = closeableHttpResponse.getFirstHeader(MIME.CONTENT_DISPOSITION);
+	Pattern pattern = Pattern.compile(".*filename=\"(.*)\".*");
+	Matcher matcher = pattern.matcher(header.getValue());
+	String fileName = "";
+	if (matcher.matches()) {
+		fileName = matcher.group(1);
+	}
+	FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+	IOUtils.copy(httpEntity.getContent(), fileOutputStream);
+	fileOutputStream.close();
 
 
 用户认证信息同步 - /users/kyc
@@ -608,6 +660,8 @@ accountName         企业开户名称                        必选
 bank                企业开户银行                        必选
 bankAccount         企业银行账号                        必选
 orgcode             统一社会信用代码                    必选
+contactCode         联系人身份证号码                    必选
+contactName         联系人姓名                             必选
 businessFile        营业执照                            必选
 =================  ================================ ================
 一个用户只能关联一个企业
@@ -638,51 +692,6 @@ kycEnterprise        企业认证信息的键值对
 	    }
     }
 
-下载保全文件 - /attestation/download
---------------------------------------------------------------
-
-客户上传到保全数据会经过一定的处理（比如模板渲染）生成一份保全文件，这份保全文件才是最终会hash到区块链上的数据，也是最终能通过公证处出公证书或者通过司法鉴定中心出司法鉴定书的数据。
-
-payload
-^^^^^^^^^^^^^^^
-
-=================  ================================ ================
-参数名 				描述                             是否可选
-=================  ================================ ================
-ano                String字符串，保全号               必选
-=================  ================================ ================
-
-返回的文件
-^^^^^^^^^^^^^^^
-
-该接口会返回保全文件以及文件名，文件就是http返回结果的body，文件名存放在http的header中，header的名称是Content-Disposition，header值形如::
-	
-	form-data; name=Content-Disposition; filename=5Yhus2mVSMnQRXobRJCYgt.zip
-
-以java为例::
-
-	// 此处省略使用apache http client构造http请求的过程
-	// closeableHttpResponse是一个CloseableHttpResponse实例
-	HttpEntity httpEntity = closeableHttpResponse.getEntity();
-	Header header = closeableHttpResponse.getFirstHeader(MIME.CONTENT_DISPOSITION);
-	Pattern pattern = Pattern.compile(".*filename=\"(.*)\".*");
-	Matcher matcher = pattern.matcher(header.getValue());
-	String fileName = "";
-	if (matcher.matches()) {
-		fileName = matcher.group(1);
-	}
-	FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-	IOUtils.copy(httpEntity.getContent(), fileOutputStream);
-	fileOutputStream.close();
-
-
-保全访问链接
---------------------------------------------------------------
-
-生成链接
-^^^^^^^^^^^^^^^
-
-生成用户访问保全数据的链接，该链接允许用户在不登陆保全网的情况下查看保全内容。直接调用sdk生成链接。
 
 上传签章图片 - /contract/signature
 ----------------------
@@ -784,13 +793,29 @@ Map                   key-value，key为签章图片id，value为签章图片地
 
 客户在保全网电子签章时上传用来签章合同pdf。
 
-电子签章流程如下：
-
-.. image:: images/contract_flowsheet.png
 
 附件
 ^^^^^^^^^^^^^^^
 同保全附件上传，暂只支持单个合同，附件必须是pdf格式
+
+payload
+^^^^^^^^^^^^^^^
+
+=================  ======================================= ================
+参数名 				描述                                    是否可选
+=================  ======================================= ================
+title              String字符串，合同标题                    必选
+end_at             Date类型，合同可以签署的截止时间          必选
+remark             String字符串，合同备注                    必选
+=================  ======================================= ================
+
+例如::
+
+    {
+        "title": "这是xx合同的标题",
+        "end_at": "TueAug1418: 08: 29CST2018",
+        "remark": "这是xx合同的备注信息"
+    }
 
 form表单形式上传单个附件::
 
@@ -816,58 +841,6 @@ contractId         String字符串，合同id
 	   "contractId":"4imixswKjEUU2rzintD3Vx"
     }
 
-设置合同相关信息 - /contract/setDetail
-----------------------
-
-客户在保全网电子签章时设置合同的相关信息。
-
-payload
-^^^^^^^^^^^^^^^
-
-=================  ======================================= ================
-参数名 				描述                                    是否可选
-=================  ======================================= ================
-contract_id        String字符串，合同id                      必选
-title              String字符串，合同标题                    必选
-end_at             Date类型，合同可以签署的截止时间           必选
-remark             String字符串，合同备注                    必选
-userPhones         数组对象，签署合同人员电话                必选
-yourself            布尔类型，是否参与签署                可选，默认为true
-=================  ======================================= ================
-
-userPhones 为合同签署人列表，签署人必须在保全网已注册切实名
-假定payload如下所示::
-
-    {
-        "title": "这是xx合同的标题",
-         "end_at": "TueAug1418: 08: 29CST2018",
-         "remark": "这是xx合同的备注信息",
-          "userPhones": [
-             "15811111111",
-             "15822222222"
-
-          ],
-          "contract_id": "4imixswKjEUU2rzintD3Vx",
-          "yourself": "true"
-    }
-
-返回的data
-^^^^^^^^^^^^^^
-
-调用接口成功后会返回签章图片id
-
-=================  ================================
-字段名 				描述
-=================  ================================
-result              String字符串，设置的结果
-=================  ================================
-
-例如::
-
-    {
-        "result": "success"
-    }
-
 发送验证码 - /contract/verifyCode
 ----------------------
 
@@ -881,19 +854,20 @@ payload
 =================  ======================================= ================
 contract_id        String字符串，合同id                      必选
 phone              String字符串，当前签署人手机号                   必选
+type               String字符串，签署人类型                      必选，（可填"personal"，"enterprise"）
 =================  ======================================= ================
-phone 必须按签署顺序来，创建人第一（即access_key所属组织的创建者），其后是设置合同时列表的顺序
+type必须根据预申请证书类型填写，personal请事先完成个人实名，enterprise请事先完成企业实名
+
 假定payload如下所示::
 
     {
         "phone": "15861111111",
-        "contract_id": "4imixswKjEUU2rzintD3Vx"
+        "contract_id": "4imixswKjEUU2rzintD3Vx",
+         "type":"personal",
     }
 
 返回的data
 ^^^^^^^^^^^^^^
-
-调用接口成功后会返回签章图片id
 
 =================  ================================
 字段名 				描述
@@ -921,27 +895,23 @@ payload
 contract_id        String字符串，合同id                      必选
 phone              String字符串，当前签署人手机号                   必选
 verify_code        String字符串，收到的验证码                  必选
-ecs_status             枚举值，合同状态                    必选
+ecs_status             枚举值，合同状态                    必选（当前可选"DONE"签署）
 page                String字符串，签署位置所在页码                    必选
 posX                String字符串，签署横坐标位置               必选
 posY                String字符串，签署纵坐标位置               必选
-template_id        String字符串，模板id                       可选
-identities         Object对象，身份事项                        可选（template_id有值时必填）
-factoids           数组对象，陈述集                           可选（template_id有值时必填）
-completed          Boolean值，是否完成陈述集的上传            可选，默认为true
+template_id        String字符串，模板id                        可选（completed为true必填，可登录保全网创建模板）
+identities         Object对象，身份事项                        可选（completed为true必填）
+factoids           数组对象，陈述集                            可选（completed为true必填）
+completed          Boolean值，是否完成合同签署             必选，false或true
 signature_id       String字符串，签章id                       可选，可不填
-type               String字符串，签署类型                     可选，可不填（可选"personal"，"enterprise"）
-orgcode            String字符串，统一社会信用代码            可选（type值为"enterprise"时必填）
+type               String字符串，签署类型                     必选，（"personal"，"enterprise"）
 =================  ======================================= ================
-ecs_status位枚举值，签署时为"DONE",取消时为"CANCEL"取消只能发起人取消,拒绝时为"REJECT"，
-template_id为生成的保全证书模板id（可到官网设置自己的模板），可不填，填了则identities，factoids必填
+template_id为生成的保全证书模板id（可到官网设置自己的模板）
 signature_id为签章图片得id，设置则使用此签章图片签章，不设置则根据企业实名认证信息或个人实名认证信息生成签章图片
 type为签署类型，现有"personal"个人签章，使用个人证书签名；"enterprise"企业签章，默认会使用用户上传的签章图片，如未上传签章图片则根据此账户企业认证名称生成签章图片，使用企业证书签名。
-orgcode为签署企业认证时的统一社会信用代码，当一个用户有多个企业时，需要指定其某个企业签署的则传该企业统一社会信用代码
 假定payload如下所示::
 
    {
-    "title": "这是xx合同的标题",
     "phone": "15811111111",
     "verify_code": "1525",
     "ecs_status": "DONE",
@@ -970,16 +940,13 @@ orgcode为签署企业认证时的统一社会信用代码，当一个用户有�
             }
         }
     ],
-    "completed": true,
+    "completed": false,
     "signature_id":"",
     "type":"",
-    "orgcode":""
 }
 
 返回的data
 ^^^^^^^^^^^^^^
-
-调用接口成功后会返回签章图片id
 
 =================  ================================
 字段名 				描述
@@ -1114,6 +1081,7 @@ Map                   key-value，value为合同详情
 			    ],
 				"endDate": "1537279284000",
 				"id": "jVef7CWtiFTvGRZ9ZG6ndD",
+				"attestationId": "EB56D19A331E48D78B37250B05563C60",
 				"startDate": "1505700065000",
       				"isCreator": false,
    				"status": "WAIT_OTHERS",
@@ -1163,192 +1131,188 @@ contract_id            String字符串，合同id                      必选
 	IOUtils.copy(httpEntity.getContent(), fileOutputStream);
 	fileOutputStream.close();
 
-创建合同组 - /contract/group
-----------------------
-客户在保全网电子签章时创建合同组并上传用来签章合同pdf。
-
-附件
-^^^^^^^^^^^^^^^
-同保全附件上传，暂只支持单个合同，附件必须是pdf格式
-
-form表单形式上传单个附件::
-
-	<form method='post' enctype='multipart/form-data'>
-	  ...
-	  <input type=file name="attachments[0][]">
-	</form>
-
-返回的data
-^^^^^^^^^^^^^^
-
-调用接口成功后会返回创建的合同组id
-
-=================  ================================
-字段名 				描述
-=================  ================================
-groupId            String字符串，合同组id
-=================  ================================
-合同组可添加多份合同，但是签署时pdf内容都是一致的，如需添加合同内容不一致的pdf请重新创建合同组
-例如::
-
-    {
-	   "groupId":"kRcDGVqwxrKmjG1oBjH5BN"
-    }
-    
-合同组添加合同并设置合同相关信息 - /contract/setGroupDetail
-----------------------
-
-客户在保全网电子签章时设置合同组的相关信息。
+证据固定 - /copyright/fixedEvidence
+------------------------------------
+对原创文章和侵权文章进行证据固定。
 
 payload
 ^^^^^^^^^^^^^^^
-
 =================  ======================================= ================
 参数名 				描述                                    是否可选
 =================  ======================================= ================
-group_id           String字符串，合同组id                    必选
-title              String字符串，合同标题                    必选
-end_at             Date类型，合同可以签署的截止时间           必选
-remark             String字符串，合同备注                    必选
-userPhones         数组对象，签署合同人员电话                必选
+unique_id          String字符串，不超过255位，保全唯一码      必选
+template_id        String字符串，模板（文件HASH模板）id       必选
+identities         Object对象，身份事项                       必选
+factoids           数组对象，陈述集                           必选
 =================  ======================================= ================
-userPhones 为合同签署人列表，签署人必须在保全网已注册且实名
-假定payload如下所示::
 
-    {
-        "title": "这是xx合同的标题",
-         "end_at": "TueAug1418: 08: 29CST2018",
-         "remark": "这是xx合同的备注信息",
-          "userPhones": [
-             "15811111111",
-             "15822222222"
 
-          ],
-          "group_id": "kRcDGVqwxrKmjG1oBjH5BN"
-    }
+unique_id是保全唯一码，这个唯一码的作用是避免在网络超时或者其它异常的情况下接入方重复上传相同内容的保全数据。如果同样unique_id的保全内容多次上传，保全网只进行1次保全，并返回相同的保全号。
 
-返回的data
-^^^^^^^^^^^^^^
+template_id为证据固定模板ID
 
-调用接口成功后会返回设置的合同id
+**陈述** 是一个Object对象，包含unique_id,type和data三个字段，且必须包含一个type 为"qqxx" 的对象,data 中的字段皆为必填字段 如下::
 
-=================  ================================
-字段名 				描述
-=================  ================================
-contract_id              String字符串，返回的合同id
-=================  ================================
-
-例如::
-
-    {
-        "contractId": "8P77Xa35ioMX5W1Z4zHyVJ"
-    }
-    
-签署合同和设置签署组状态 - /contract/signGroup
-----------------------
-
-客户在保全网签署合同和设置签署合同组状态。
-
-payload
+	{
+		"unique_id": "9de7be94-a697-4398-333a-678d3f916b9f",
+		"type": "qqxx",
+		"data": {
+                "platFormId": "1",//绑定平台Id
+                "ywlj": "https://www.baoquan.com/",
+                "ywbt": "hahaha",
+                "originalType": "1",
+                "url": "https://baoquan.readthedocs.io/zh/latest/api.html#sha256-attestation-hash",
+                "qqbt": "这是侵权问题",
+                "qqwz": "这是侵权网站",
+                "bqgs": "这是版权归属",
+                "qqbh": "这是侵权编号",
+                "qqzt": "这是侵权主体",
+		"oriSubDate": "原文发布时间",//格式为yyyy-MM-dd HH:mm
+		"pirSubDate": "侵权文章发布时间",//格式为yyyy-MM-dd HH:mm
+                "matchNum": "侵权文章相似度"
+		}
+	}
+**平台代码集**
 ^^^^^^^^^^^^^^^
+=================  =======================================
+key 				value
+=================  =======================================
+1                  微信公众号
+2                  知乎
+3                  简书
+4                  豆瓣
+5                  杭州日报报业集团
+=================  =======================================
 
-=================  ======================================= ================
-参数名 				描述                         是否可选
-=================  ======================================= ================
-group_id           String字符串，合同组id                         必选
-phone              String字符串，当前签署人手机号                  必选
-verify_code        String字符串，收到的验证码                     必选
-ecs_status             枚举值，合同状态                          必选
-page                String字符串，签署位置所在页码               必选
-posX                String字符串，签署横坐标位置                 必选
-posY                String字符串，签署纵坐标位置                  必选
-template_id        String字符串，模板id                         可选
-identities         Object对象，身份事项                        可选（template_id有值时必填）
-factoids           数组对象，陈述集                           可选（template_id有值时必填）
-completed          Boolean值，是否完成陈述集的上传            可选，默认为true
-signature_id       String字符串，签章id                       可选，可不填
-type               String字符串，签署类型                     可选，可不填（可选"personal"，"enterprise"）
-orgcode            String字符串，统一社会信用代码            可选（type值为"enterprise"时必填）
-=================  ======================================= ================
-ecs_status位枚举值，签署时为"DONE"
-"DONE"状态的合同组可继续调用添加合同接口，向组内添加合同，且无需再发验证码，签署的合同默认还是创建该合同组时所上传的合同
-template_id为生成的保全证书模板id（可到官网设置自己的模板），可不填，填了则identities，factoids必填
-signature_id为签章图片得id，设置则使用此签章图片签章，不设置则根据企业实名认证信息或个人实名认证信息生成签章图片
-type为签署类型，现有"personal"个人签章，不会生成ca证书只会在合同上生成个人姓名水印；"enterprise"企业签章，如未上传签章图片id怎根据企业实名认证信息生成签章；如不填，不填则会寻找此账户默认签章图片，如无默认签章图片则根据此账户是否企业认证，根据企业认证名称生成签章图片，如没有企业认证则根据此用户实名认证信息生成个人图片签署
-orgcode为签署企业认证时的统一社会信用代码，当一个用户有多个企业时，需要指定其某个企业签署的则传该企业统一社会信用代码
+**原创文章类型代码集**
+^^^^^^^^^^^^^^^
+=================  =======================================
+key 				value
+=================  =======================================
+1	                 体育
+2	                 财经
+3	                 娱乐
+4	                 军事
+5	                 电影
+6	                 数码
+7	                 科技
+8	                 政治
+9	                 小说
+10	                 汽车
+11	                 文学
+12	                 教育
+13	                 法律
+14	                 时尚
+15	                 艺术
+16	                 女性
+17	                 地理
+18	                 星座
+19	                 建筑
+20	                 健康
+21	                 能源
+22	                 历史
+23	                 房产
+24	                 收藏
+25	                 母婴
+26	                 读书
+27	                 游戏
+28	                 旅游
+29	                 情感
+30	                 心理
+31	                 美妆
+32	                 家居
+33	                 音乐
+=================  =======================================
+陈述的unique_id的作用跟保全的unique_id类似，如果某次证据固定过程中同样unique_id的陈述内容多次上传到保全网，保全网只处理1次。
+
+陈述中必须包含一个type为qqxx的对象，data是陈述的字段值，如下图所示：
+
 假定payload如下所示::
 
-   {
-    "title": "这是xx合同的标题",
-    "phone": "15811111111",
-    "verify_code": "1525",
-    "ecs_status": "DONE",
-    "group_id": "8P77Xa35ioMX5W1Z4zHyVJ",
-    "page": "4",
-    "posX": "400",
-    "posY": "500",
-    "template_id": "2hSWTZ4oqVEJKAmK2RiyT4",
-    "identities": {
-        "MO": "15857112383",
-        "ID": "42012319800127691X"
-    },
-    "factoids": [
-        {
-            "unique_id": "9de7be94-a697-4398-945a-678d3f916b9f",
-            "type": "hash",
-            "data": {
-                "userName": "李三",
-                "idCard": "330124199501017791",
-                "buyAmount": 0.3,
-                "incomeStartTime": "2015-12-02",
-                "incomeEndTime": "2016-01-01",
-                "createTime": "2015-12-01 14:33:44",
-                "payTime": "2015-12-01 14:33:59",
-                "payAmount": 600
-            }
-        }
-    ],
-    "completed": true,
-    "signature_id":"",
-    "type":"",
-    "orgcode":""
-}
+	{
+		"unique_id": "acafa00d-5579-4fe5-93c1-de89ec82006e",
+		"template_id": "2hSWTZ4oqVEJKAmK2RiyT4",
+		"identities": {
+			"MO": "15857112383",
+			"ID": "42012319800127691X"
+		},
+		"factoids": [
+			{
+                    "unique_id": "9de7be94-a697-4398-945a-678d3f916b9f",
+                    "type": "qqxx",
+                    "data": {
+                                "platFormId": "1",//绑定平台Id
+                                "ywlj": "https://www.baoquan.com/",//原文链接
+                                "ywbt": "hahaha", //原文标题
+                                "originalType": "1", //原创文章标签类型
+                                "url": "https://baoquan.readthedocs.io/zh/latest/api.html#sha256-attestation-hash",//侵权URL
+                                "qqbt": "这是侵权标题",//侵权标题
+                                "qqwz": "这是侵权网站", //侵权网站
+                                "bqgs": "这是版权归属", //版权归属
+                                "qqbh": "这是侵权编号",//侵权编号
+                                "qqzt": "这是侵权主体", //侵权主体
+				"oriSubDate": "2018-06-01 19:20",//格式为yyyy-MM-dd HH:mm
+				"pirSubDate": "2018-06-02 19:20",//格式为yyyy-MM-dd HH:mm
+                                "matchNum": "侵权文章相似度"  //侵权文章相似度
+                    }
+			}
+		]
+
+	}
+
+
+
 
 返回的data
 ^^^^^^^^^^^^^^
 
+调用证据固定接口成功后会返回证据固定保全号
+
 =================  ================================
 字段名 				描述
 =================  ================================
-result              String字符串，合同签署结果
+no                 String字符串，保全号
 =================  ================================
 
 例如::
 
 	{
-    		"result": "success"
-	}    
+		"request_id": "2XiTgZ2oVrBgGqKQ1ruCKh",
+		"data": {
+			"no": "rBgGqKQ1ruCKhXiTgZ2oVr",
+		}
+	}
 
-合同组签署发送验证码 - /contract/verifyCodeForGroup
-----------------------
 
-客户在保全网电子签章时发送验证码。
+添加原创 - /copyright/createOriginalArticle
+------------------------------------
+将用户的原创文章添加到保全网，用户侵权文章全网扫描。
 
 payload
 ^^^^^^^^^^^^^^^
+=================  ======================================= ================
+参数名 				描述                                    是否可选
+=================  ======================================= ================
+uniqueId          String字符串，不超过255位，原创文章唯一码      必选
+linkUrl           原创文章链接                                必选
+nickName          文章发布平台的用户昵称                       必选
+originalType      原创文章类型代码                            必选
+platformCode      平台代码                                   必选
+subDate           文章发布时间                                必选
+title             文章标题                                   必选
+=================  ======================================= ================
 
-=================  ======================================= ================
-参数名 				描述                         是否可选
-=================  ======================================= ================
-group_id           String字符串，合同组id                        必选
-phone              String字符串，组创建人手机号                    必选
-=================  ======================================= ================
-phone 为合同组的创建人
 假定payload如下所示::
 
     {
-        "phone": "15861111111",
-        "group_id": "kRcDGVqwxrKmjG1oBjH5BN"
+        "uniqueId": "5SiadRtV6ebSAThUEdKsUF",
+        "linkUrl": "http://www.baoquan.com",
+        "nickName": "平台昵称",
+        "originalType": "1,2",//多种类型，则逗号分隔
+        "platformCode": "1",
+        "subDate":"2018-06-27 17:16"//格式为“YYYY-MM-DD HH:mm”
+        "title":"文章标题"
+
     }
 
 返回的data
@@ -1357,13 +1321,13 @@ phone 为合同组的创建人
 =================  ================================
 字段名 				描述
 =================  ================================
-result              String字符串，设置的结果
+originalId              String字符串，设置的结果,文章的uniqueId
 =================  ================================
 
 例如::
 
     {
-        "result": "success"
+        "originalId": "5SiadRtV6ebSAThUEdKsUF"
     }
 
 客户免验证码签约授权发送验证码 - /authorization/verifyCode
@@ -1378,13 +1342,14 @@ payload
 参数名 				描述                         是否可选
 =================  ======================================= ================
 phone              String字符串，授权人手机号                    必选
+type               String字符串，签署类型                     必选，（"personal"，"enterprise"）
 =================  ======================================= ================
 phone 为合同组的创建人
 假定payload如下所示::
 
     {
-        "phone": "15861111111"
-
+        "phone": "15861111111",
+        "type":"personal"
     }
 
 返回的data
@@ -1415,13 +1380,15 @@ payload
 =================  ======================================= ================
 phone              String字符串，授权人手机号                    必选
 verfiy_code          String字符串，验证码                    必选
+type               String字符串，签署类型                     必选，（"personal"，"enterprise"）
 =================  ======================================= ================
 phone 为合同组的创建人
 假定payload如下所示::
 
     {
         "phone": "15861111111",
-        "verfiy_code": "1111"
+        "verfiy_code": "1111",
+        "type":"personal"
     }
 
 返回的data

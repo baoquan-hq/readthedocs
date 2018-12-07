@@ -6,7 +6,7 @@ SDK
 .. toctree::
 	:maxdepth: 2
 
-	Java <java_v2>
+	Java <java>
 
 
 
