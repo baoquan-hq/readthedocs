@@ -13,9 +13,6 @@
 	client.setPemPath("path/to/rsa_private.pem");
 	client.setVersion("v2");
 
-接口
-===============
-
 保全 - /attestations
 ----------------------
 
