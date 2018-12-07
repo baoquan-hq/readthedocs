@@ -5,12 +5,13 @@
 ------------------
 ::
 	BaoquanClient client = new BaoquanClient();
-	// 设置api地址，比如保全网的测试环境地址
+    //设置api地址，比如保全网的测试环境地址
 	client.setHost("https://baoquan.com");
-	// 设置access key
+    // 设置access key
 	client.setAccessKey("fsBswNzfECKZH9aWyh47fc");
-	// 设置rsa私钥文件的绝对路径
+    // 设置rsa私钥文件的绝对路径
 	client.setPemPath("path/to/rsa_private.pem");
+    // 设置版本
 	client.setVersion("v2");
 
 保全 - /attestations
