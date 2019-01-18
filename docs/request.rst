@@ -8,10 +8,10 @@
 
 保全网会提供向后兼容的API，不同的API版本会以比如v2、v2.1这样的字符串标记，当前的版本为v2。
 
-API地址：`https://baoquan.com/api/v2`
+API地址：`https://www.baoquan.com/api/v2`
 
 请求路径=API地址+接口名称，比如保全接口的名称是/attestations，则请求路径为
-`https://baoquan.com/api/v2/attestations`
+`https://www.baoquan.com/api/v2/attestations`
 
 
 方法

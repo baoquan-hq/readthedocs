@@ -16,7 +16,7 @@ Python
 
 	client = BaoquanClient()
 	// 设置api地址，比如保全网的测试环境地址
-	client.host = 'https://baoquan.com'
+	client.host = 'https://www.baoquan.com'
 	// 设置access key
 	client.access_key = 'fsBswNzfECKZH9aWyh47fc'
 	// 设置rsa私钥文件的绝对路径

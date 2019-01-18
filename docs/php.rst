@@ -16,7 +16,7 @@ PHP
 
 	$client = new BaoquanClient();
 	// 设置api地址，比如保全网的测试环境地址
-	$client->setHost('https://baoquan.com');
+	$client->setHost('https://www.baoquan.com');
 	// 设置access key
 	$client->setAccessKey('fsBswNzfECKZH9aWyh47fc');
 	// 设置rsa私钥文件的绝对路径
