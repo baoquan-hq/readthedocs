@@ -217,11 +217,16 @@ no                 String字符串，保全号
 
 保全书凭证
 ^^^^^^^^^^^^^^^
-如果是新闻、文章、资讯类等内容保全完成后，需要打上保全网已保全的LOGO，点击查看证书即可跳转到对应保全书上链页面。如下图所示：
+如果是新闻、文章、资讯类等内容保全完成后，需要打上保全网已保全的LOGO，点击查看证书即可跳转到对应保全书上链页面。
+如下图所示:
+
 .. image:: images/pingzheng.png
-查看保全所对应的JS脚本代码如下：<!-- 增加已保全标签链接 --> title所对应的保全号需根据实际保全内容入参。
-<div id="baoquan-evidence" title="90458CE5C19B402B9BA46905736DF819"></div><!-- 建议将JS放在底部导入，否则可能会影响显示效果  -->
-<script src="https://eagle-p1.oss-cn-szfinance.aliyuncs.com/baoquan.js"></script>
+
+查看保全所对应的JS脚本代码如下::
+    <!-- 增加已保全标签链接 --> title所对应的保全号需根据实际保全内容入参。
+    <div id="baoquan-evidence" title="90458CE5C19B402B9BA46905736DF819"></div>
+    <!-- 建议将JS放在底部导入，否则可能会影响显示效果  -->
+    <script src="https://eagle-p1.oss-cn-szfinance.aliyuncs.com/baoquan.js"></script>
 
 追加陈述 - /factoids
 ----------------------
