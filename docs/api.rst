@@ -506,7 +506,7 @@ hhf_hash                 String字符串，杭互法司法链链上hash
 
 例如::
 
-{
+	{
 	"data": {
 		"status": "SUCCESSED",
 		"message": "取证成功",
@@ -514,7 +514,8 @@ hhf_hash                 String字符串，杭互法司法链链上hash
 		"hhf_hash": null
 	},
 	"request_id": "c4e7240c-b1d2-4b0a-a73a-3cc1cc0d05f7"
-}
+	}
+
 
 
 获取保全数据 - /attestation
