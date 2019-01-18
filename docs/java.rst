@@ -532,3 +532,59 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
     public void testauthorized() throws ServerException {
         client.authorized("15811111111", "7333", "personal");
     }
+
+异步网页取证
+------------------
+
+::
+
+    public void createAttestationWithUrl() throws ServerException, InterruptedException {
+        String url = "http://www.qq.com/";
+        CreateAttestation4UrlPayload payload = new CreateAttestation4UrlPayload();
+        // 设置保全唯一码
+        payload.setUniqueId(UUID.randomUUID().toString());
+        // 设置模板id
+        payload.setTemplateId("4g8kLrgrr8AGTXKqUzW1rc");
+        // 设置陈述是否上传完成，如果设置成true，则后续不能继续追加陈述
+        payload.setCompleted(true);
+        // 设置保全所有者的身份标识，标识类型定义在IdentityType中
+
+        Map<IdentityType, String> identities = new HashMap<IdentityType, String>();
+        identities.put(IdentityType.ID, "429006198507104214");
+        identities.put(IdentityType.MO, "18767106890");
+        payload.setIdentities(identities);
+        // 设置模板陈述信息
+        List<Factoid> factoids = new ArrayList<Factoid>();
+        Factoid qqxxFactoid = new Factoid();
+        qqxxFactoid.setUnique_id(UUID.randomUUID().toString() + new Date().getTime());
+
+        qqxxFactoid.setType("qqxx");
+        payload.setUrl(url);
+        Map<String, String> loanDataMap = new HashMap<String, String>();
+        qqxxFactoid.setData(loanDataMap);
+        loanDataMap.put("url", url);
+        qqxxFactoid.setUnique_id(randomUniqueId());
+        qqxxFactoid.setType("website");
+        qqxxFactoid.setData(loanDataMap);
+        factoids.add(qqxxFactoid);
+        payload.setFactoids(factoids);
+
+        // 设置网页取证相关信息
+        payload.setUrl("http://www.simplechain.com/");
+        payload.setLabel("简单上链");
+        payload.setRemark("简单上链");
+        payload.setWebName("简单上链");
+
+        CreateAttestationResponse response = client.createAsyAttestationWithUrl(payload);
+        System.out.print(response.getData().getNo());
+    }
+
+网页取证状态查询
+------------------
+
+::
+
+    public void getAttestationUrl() throws ServerException {
+        GetAttestationUrlResponse response = client.getAttestationWithUrl("E4276C1F61084FCA9AE1CB714526ACC9");
+        System.out.print(response.getData().getStatus());
+    }
