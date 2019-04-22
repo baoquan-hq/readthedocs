@@ -6,7 +6,7 @@ Java
 	<dependency>
 	    <groupId>com.baoquan</groupId>
 	    <artifactId>eagle-sdk</artifactId>
-	    <version>2.0.4</version>
+	    <version>2.0.6</version>
 	</dependency>
 
 如果使用gradle，可以加入如下依赖::
