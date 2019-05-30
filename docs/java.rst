@@ -534,7 +534,7 @@ getAttestation有两个参数，第1个参数ano是保全号，第二个参数fi
 ::
 
 	   public void testSendAuthorizationVerifyCode() throws ServerException {
-        client.sendAuthorizationVerifyCode("15811111111", "persoanl");
+        client.sendAuthorizationVerifyCode("15811111111", "personal");
     }
 
 客户免验证码签约授权确认
