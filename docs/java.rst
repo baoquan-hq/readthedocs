@@ -11,7 +11,7 @@ Java
 
 如果使用gradle，可以加入如下依赖::
 	
-	compile group: 'com.baoquan', name: 'eagle-sdk', version: '2.0.9'
+	compile group: 'com.baoquan', name: 'eagle-sdk', version: '2.0.10'
 
 初始化客户端
 ------------------
