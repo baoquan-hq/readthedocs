@@ -834,7 +834,7 @@ result             String字符串，设置的结果
     }
 
 
-设置默认签章图片 - /contract/signature/delete/default
+删除默认签章图片 - /contract/signature/delete/default
 ----------------------
 
 客户在保全网删除用户默认签章图片。
