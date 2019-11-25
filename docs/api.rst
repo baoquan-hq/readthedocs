@@ -548,6 +548,9 @@ factoids           陈述列表
 completed          陈述是否上传完成
 attachments        附件列表
 blockchain_hash    区块链hash，当尚未hash到区块链时为空
+number   证据提取码，证据提交后半个小时后生成
+sm3_hash    国密sm3值
+sha256_hash    sha256 hash值
 =================  ================================================================
 
 attachments是一个数组，其中key是factoids中陈述的角标，value是一个附件id数组
