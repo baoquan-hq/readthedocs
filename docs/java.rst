@@ -6,12 +6,12 @@ Java
 	<dependency>
 	    <groupId>com.baoquan</groupId>
 	    <artifactId>eagle-sdk</artifactId>
-	    <version>2.0.11</version>
+	    <version>2.0.16</version>
 	</dependency>
 
 如果使用gradle，可以加入如下依赖::
 	
-	compile group: 'com.baoquan', name: 'eagle-sdk', version: '2.0.11'
+	compile group: 'com.baoquan', name: 'eagle-sdk', version: '2.0.16'
 
 初始化客户端
 ------------------
