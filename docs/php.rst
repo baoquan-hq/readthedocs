@@ -5,7 +5,7 @@ PHP
 
 	{
 	  "require": {
-	    "baoquan/eagle-sdk": "1.0.12"
+	    "baoquan/eagle-sdk": "1.1.1"
 	  }
 	}
 
